@@ -126,8 +126,8 @@ export default function Chatbot() {
         case "timeline":
           return {
             text: es
-              ? "No publicamos plazos garantizados porque dependen del alcance y de qué tan rápido recibamos tu contenido. Lo que sí hacemos: te damos un plazo concreto por escrito antes de empezar, y respondemos en un día hábil. Agenda una consulta y te damos el plazo real de tu proyecto."
-              : "We don't publish guaranteed timelines, because they depend on scope and how quickly we get your content. What we do commit to: a concrete written timeline before we start, and a reply within one business day. Book a consultation and we'll give you the real timeline for your project.",
+              ? "Cada servicio en nuestra página muestra un tiempo aproximado de entrega. Su propuesta por escrito confirma el plazo exacto de su proyecto, y respondemos en un día hábil. Agende una consulta gratis de 30 minutos para conocer el plazo real de su proyecto."
+              : "Each service on our Services page shows a typical ready-in time. Your written proposal confirms the exact timeline for your project, and we reply within one business day. Book a free 30-minute consultation to get your real timeline.",
           };
 
         case "included":

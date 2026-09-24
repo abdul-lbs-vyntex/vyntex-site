@@ -4,8 +4,8 @@ import { RESELLER_PROGRAM } from "@/lib/reseller-program";
  * VYNTEX pricing — LEGACY INTERNAL PRICE BOOK.
  *
  * As of the Stripe migration, prices are NOT shown on the public website.
- * Services and their descriptions sync from Stripe (lib/stripe/*); amounts are
- * quoted after a consultation. This file remains only for the legacy partner
+ * The public service catalog lives in lib/services-catalog.ts (no prices);
+ * amounts are discussed in the free consultation. This file remains only for the legacy partner
  * portal and order code, and must not be imported by public pages.
  *
  * Every price shown anywhere on the site (pricing cards, checkout, chatbot,

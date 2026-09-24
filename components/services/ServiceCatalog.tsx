@@ -2,162 +2,143 @@
 
 import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Check, CalendarClock, Sparkles, ArrowRight } from "lucide-react";
+import { Check, X, CalendarClock, ArrowRight, Compass } from "lucide-react";
 import { useLang } from "@/context/LanguageContext";
 import { openConsultation, openConsultationFor } from "@/components/BookConsultation";
 import type { CONSULT_SERVICES } from "@/lib/validation/consultation";
 import {
-  SERVICE_CATEGORIES,
-  type CatalogCategory,
-  type CatalogService,
-} from "@/lib/stripe/parse";
+  AI_BLUEPRINT,
+  SERVICE_GROUPS,
+  SERVICES,
+  type ServiceGroupId,
+  type ServiceItem,
+} from "@/lib/services-catalog";
 
 /**
- * Service catalog synced from Stripe (see lib/stripe/catalog.ts).
- *
- * NO PRICES. The data passed in never contains an amount. Every card leads to a
- * consultation, pre-filled with the service the visitor picked.
- *
- * Receives plain serializable data from a Server Component, so the Stripe key
- * and the Stripe SDK never reach the browser.
+ * VYNTEX service catalog — same content and card structure as the Command
+ * Center, with NO prices, fees, deposits, terms, or quotes. Every card leads to
+ * the free 30-minute consultation, pre-filled with the service chosen. Custom
+ * work routes to the AI Blueprint.
  */
 
 type ConsultService = (typeof CONSULT_SERVICES)[number];
 type Lang = "en" | "es";
 
-/** Stripe category → consultation form checkbox. Empty = visitor chooses. */
-const CONSULT_TOKEN: Record<CatalogCategory, ConsultService[]> = {
-  packages: [],
-  websites: ["website"],
-  "ai-tools": ["ai_automation"],
-  crm: ["crm"],
-  branding: ["branding"],
-  social: ["social_media"],
-  consulting: [],
-};
+/** Custom work is planned through the AI Blueprint, never quoted on the site. */
+const CUSTOM_IDS = new Set(["web-custom", "ai-advanced"]);
+
+function consultTokens(service: ServiceItem): ConsultService[] {
+  switch (service.group) {
+    case "crm":
+      return ["crm"];
+    case "web":
+      return ["website"];
+    case "ai":
+      return ["ai_automation"];
+    case "brand":
+      return service.id === "social-mgmt" ? ["social_media"] : ["branding"];
+    default:
+      return [];
+  }
+}
 
 const en = {
   eyebrow: "SERVICES",
   title: "Choose the Right Starting Point",
-  intro:
-    "Start with one focused service, then connect more systems as your business grows.",
+  intro: "Start with one focused service, then connect more systems as your business grows.",
   tablistLabel: "Service categories",
-  categories: {
-    packages: "Packages",
-    websites: "Websites",
-    "ai-tools": "AI Tools",
-    crm: "CRM",
-    branding: "Branding",
-    social: "Social Media",
-    consulting: "Consulting",
-  } as Record<CatalogCategory, string>,
-  recommended: "Recommended",
+  popular: "Most popular",
+  readyIn: "Ready in",
+  includes: "What you get",
+  excludes: "What is not included",
+  bestFor: "Best for",
   cta: "Book a Free Consultation",
   ctaAria: (name: string) => `Book a free consultation about ${name}`,
   prefill: (name: string) => `I'd like to learn more about: ${name}.`,
-  blueprintCta: "Request an AI Blueprint",
-  blueprintAria: "Request an AI Blueprint",
-  blueprintPrefill: "I'd like to request an AI Blueprint for my business.",
   consultTitle: "Free 30-minute consultation",
   consultBody:
     "We talk through your business, recommend the package that fits, and walk you through its pricing. No sales pressure, in English or Spanish.",
-  customNote: "Need something custom? We plan it with an AI Blueprint first.",
-  customLink: "See the AI Blueprint",
-  thirdParty: "Third-party platform fees (hosting, domains, software, messaging, advertising) are billed separately.",
-  emptyTitle: "Our service catalog is being updated",
-  emptyBody:
-    "Book a free 30-minute consultation and we will walk you through every option for your business.",
+  thirdParty:
+    "Third-party platform fees (hosting, domains, software, messaging, advertising) are billed separately.",
+  blueprintEyebrow: "NEED SOMETHING CUSTOM?",
+  blueprintCta: "Request an AI Blueprint",
+  blueprintPrefill: "I'd like to request an AI Blueprint for my business.",
 };
 
 type Dict = typeof en;
 
 const es: Dict = {
   eyebrow: "SERVICIOS",
-  title: "Elige el Punto de Partida Correcto",
-  intro:
-    "Empieza con un servicio específico y conecta más sistemas a medida que tu negocio crece.",
+  title: "Elija el Punto de Partida Correcto",
+  intro: "Empiece con un servicio específico y conecte más sistemas a medida que su negocio crece.",
   tablistLabel: "Categorías de servicios",
-  categories: {
-    packages: "Paquetes",
-    websites: "Sitios Web",
-    "ai-tools": "Herramientas de IA",
-    crm: "CRM",
-    branding: "Marca",
-    social: "Redes Sociales",
-    consulting: "Consultoría",
-  },
-  recommended: "Recomendado",
-  cta: "Agenda tu Consulta Gratis",
-  ctaAria: (name: string) => `Agenda una consulta gratis sobre ${name}`,
+  popular: "Más popular",
+  readyIn: "Listo en",
+  includes: "Lo que recibe",
+  excludes: "Lo que no incluye",
+  bestFor: "Ideal para",
+  cta: "Agende su Consulta Gratis",
+  ctaAria: (name: string) => `Agende una consulta gratis sobre ${name}`,
   prefill: (name: string) => `Me gustaría saber más sobre: ${name}.`,
-  blueprintCta: "Solicita un Plan de IA",
-  blueprintAria: "Solicita un Plan de IA (AI Blueprint)",
-  blueprintPrefill: "Me gustaría solicitar un Plan de IA (AI Blueprint) para mi negocio.",
   consultTitle: "Consulta gratis de 30 minutos",
   consultBody:
-    "Hablamos de tu negocio, te recomendamos el paquete adecuado y te explicamos su precio. Sin presión de ventas, en inglés o en español.",
-  customNote: "¿Necesitas algo a la medida? Primero lo planificamos con un Plan de IA (AI Blueprint).",
-  customLink: "Ver el Plan de IA",
-  thirdParty: "Las tarifas de plataformas de terceros (hosting, dominios, software, mensajería, publicidad) se facturan por separado.",
-  emptyTitle: "Estamos actualizando nuestro catálogo de servicios",
-  emptyBody:
-    "Agenda una consulta gratis de 30 minutos y te explicamos todas las opciones para tu negocio.",
+    "Hablamos de su negocio, le recomendamos el paquete adecuado y le explicamos su precio. Sin presión de ventas, en inglés o en español.",
+  thirdParty:
+    "Las tarifas de plataformas de terceros (hosting, dominios, software, mensajería, publicidad) se facturan por separado.",
+  blueprintEyebrow: "¿NECESITA ALGO PERSONALIZADO?",
+  blueprintCta: "Solicite un AI Blueprint",
+  blueprintPrefill: "Me gustaría solicitar un AI Blueprint para mi negocio.",
 };
 
 const DICTS: Record<Lang, Dict> = { en, es };
 
 interface ServiceCatalogProps {
-  services: CatalogService[];
-  available: boolean;
-  /** Limit to these categories (e.g. on a service detail page). Default: all. */
-  categories?: CatalogCategory[];
-  /** Section heading override. When omitted, the default heading is shown. */
+  /** Limit to these groups (e.g. on a service detail page). Default: all. */
+  groups?: ServiceGroupId[];
+  /** Limit to these service ids within the groups. */
+  ids?: string[];
   heading?: { eyebrow?: string; title: string; intro?: string };
-  /** Render nothing (instead of the fallback card) when there is nothing to show. */
-  hideWhenEmpty?: boolean;
+  /** Show the AI Blueprint panel for custom work. */
+  showBlueprint?: boolean;
   id?: string;
 }
 
 export default function ServiceCatalog({
-  services,
-  available,
-  categories,
+  groups,
+  ids,
   heading,
-  hideWhenEmpty = false,
-  id,
+  showBlueprint = true,
+  id = "service-catalog",
 }: ServiceCatalogProps) {
-  // `available` distinguishes "Stripe unreachable" from "nothing published";
-  // both render the same honest fallback, so it is only used for diagnostics.
-  if (!available && process.env.NODE_ENV !== "production") {
-    console.warn("[ServiceCatalog] Stripe catalog unavailable — showing fallback.");
-  }
   const { lang } = useLang();
   const t = DICTS[lang];
   const reduceMotion = useReducedMotion() === true;
 
-  const visibleCategories = useMemo(() => {
-    const allowed = categories ?? SERVICE_CATEGORIES;
-    return SERVICE_CATEGORIES.filter(
-      (category) =>
-        allowed.includes(category) && services.some((s) => s.category === category),
-    );
-  }, [categories, services]);
+  const visibleGroups = useMemo(
+    () =>
+      SERVICE_GROUPS.filter(
+        (group) =>
+          (!groups || groups.includes(group.id)) &&
+          SERVICES.some((s) => s.group === group.id && (!ids || ids.includes(s.id))),
+      ),
+    [groups, ids],
+  );
 
-  const [selected, setSelected] = useState<CatalogCategory | null>(null);
-  const active: CatalogCategory | undefined =
-    selected && visibleCategories.includes(selected) ? selected : visibleCategories[0];
-
+  const [selected, setSelected] = useState<ServiceGroupId | null>(null);
+  const active =
+    visibleGroups.find((g) => g.id === selected) ?? visibleGroups[0] ?? null;
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const baseId = id ?? "service-catalog";
 
-  const isEmpty = visibleCategories.length === 0 || !active;
-  if (isEmpty && hideWhenEmpty) return null;
+  if (!active) return null;
 
-  const items = active ? services.filter((s) => s.category === active) : [];
+  const items = SERVICES.filter(
+    (s) => s.group === active.id && (!ids || ids.includes(s.id)),
+  );
   const head = heading ?? { eyebrow: t.eyebrow, title: t.title, intro: t.intro };
+  const twoColumn = !active.wide || items.length === 2;
 
   const onTabKey = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    const last = visibleCategories.length - 1;
+    const last = visibleGroups.length - 1;
     let next: number | null = null;
     if (event.key === "ArrowRight") next = index === last ? 0 : index + 1;
     if (event.key === "ArrowLeft") next = index === 0 ? last : index - 1;
@@ -165,213 +146,215 @@ export default function ServiceCatalog({
     if (event.key === "End") next = last;
     if (next === null) return;
     event.preventDefault();
-    const category = visibleCategories[next];
-    if (category) {
-      setSelected(category);
+    const group = visibleGroups[next];
+    if (group) {
+      setSelected(group.id);
       tabRefs.current[next]?.focus();
     }
   };
 
-  const showCustomLink =
-    visibleCategories.includes("consulting") && active !== "consulting";
-
-  const selectCategory = (category: CatalogCategory) => {
-    setSelected(category);
-    const index = visibleCategories.indexOf(category);
-    tabRefs.current[index]?.focus();
-    document.getElementById(`${baseId}-title`)?.scrollIntoView({
-      behavior: reduceMotion ? "auto" : "smooth",
-      block: "start",
-    });
-  };
-
-  // The AI Blueprint is a paid planning engagement, not the free consultation,
-  // so its card asks for a Blueprint instead of offering a free call.
-  const isBlueprint = (service: CatalogService) => service.category === "consulting";
-
-  const book = (service: CatalogService) => {
+  const book = (service: ServiceItem) =>
     openConsultationFor({
-      services: isBlueprint(service) ? ["ai_automation"] : CONSULT_TOKEN[service.category],
-      message: isBlueprint(service) ? t.blueprintPrefill : t.prefill(service.name[lang]),
+      services: consultTokens(service),
+      message: t.prefill(service.name[lang]),
     });
-  };
+
+  const requestBlueprint = () =>
+    openConsultationFor({ services: [], message: t.blueprintPrefill });
 
   return (
-    <section
-      id={id}
-      aria-labelledby={`${baseId}-title`}
-      className="services-pricing-section py-16 sm:py-20"
-    >
+    <section id={id} aria-labelledby={`${id}-title`} className="services-pricing-section py-16 sm:py-20">
       <div className="mx-auto w-full max-w-[1200px] px-5 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           {head.eyebrow ? (
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-vx-cyan">
-              {head.eyebrow}
-            </p>
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-vx-cyan">{head.eyebrow}</p>
           ) : null}
-          <h2
-            id={`${baseId}-title`}
-            className="mt-4 text-3xl font-bold tracking-[-0.045em] sm:text-5xl"
-          >
+          <h2 id={`${id}-title`} className="mt-4 text-3xl font-bold tracking-[-0.045em] sm:text-5xl">
             {head.title}
           </h2>
           {head.intro ? (
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-vx-muted">
-              {head.intro}
-            </p>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-vx-muted">{head.intro}</p>
           ) : null}
         </div>
 
-        {isEmpty ? (
-          <div className="mx-auto mt-12 max-w-2xl rounded-2xl border border-[rgba(14,165,233,0.16)] bg-vx-bg2 p-8 text-center">
-            <h3 className="text-xl font-semibold text-vx-ink">{t.emptyTitle}</h3>
-            <p className="mt-3 text-vx-muted">{t.emptyBody}</p>
+        {visibleGroups.length > 1 ? (
+          <div role="tablist" aria-label={t.tablistLabel} className="services-category-tabs mx-auto mt-10">
+            {visibleGroups.map((group, index) => {
+              const isSelected = group.id === active.id;
+              return (
+                <button
+                  key={group.id}
+                  ref={(node) => {
+                    tabRefs.current[index] = node;
+                  }}
+                  id={`${id}-tab-${group.id}`}
+                  type="button"
+                  role="tab"
+                  aria-selected={isSelected}
+                  aria-controls={`${id}-panel`}
+                  tabIndex={isSelected ? 0 : -1}
+                  onClick={() => setSelected(group.id)}
+                  onKeyDown={(event) => onTabKey(event, index)}
+                  className="services-category-tab"
+                >
+                  {group.label[lang]}
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
+
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={active.id}
+            initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reduceMotion ? undefined : { opacity: 0, y: -10 }}
+            transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <p className="mx-auto mt-6 max-w-3xl text-center text-sm leading-6 text-vx-muted">
+              {active.note[lang]}
+            </p>
+
+            <div
+              id={`${id}-panel`}
+              role={visibleGroups.length > 1 ? "tabpanel" : undefined}
+              aria-labelledby={visibleGroups.length > 1 ? `${id}-tab-${active.id}` : undefined}
+              className={`services-price-grid is-catalog ${twoColumn ? "is-two" : ""} mt-10`}
+            >
+              {items.map((service, index) => {
+                const name = service.name[lang];
+                const titleId = `${id}-${service.id}`;
+                return (
+                  <motion.article
+                    key={service.id}
+                    aria-labelledby={titleId}
+                    className={`services-price-card is-catalog ${service.popular ? "is-featured" : ""}`}
+                    initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: reduceMotion ? 0 : index * 0.05, duration: 0.4 }}
+                  >
+                    {service.popular ? <span className="services-popular-badge">{t.popular}</span> : null}
+
+                    <h3 id={titleId} className="text-2xl font-bold tracking-[-0.03em] text-vx-ink">
+                      {name}
+                    </h3>
+                    <p className="mt-2 text-sm leading-6 text-vx-muted">{service.line[lang]}</p>
+
+                    <dl className="catalog-detail mt-6">
+                      <dt>{t.readyIn}</dt>
+                      <dd>{service.readyIn[lang]}</dd>
+                    </dl>
+
+                    <h4 className="catalog-heading mt-6 text-vx-cyan">{t.includes}</h4>
+                    <ul className="mt-3 space-y-2">
+                      {service.includes[lang].map((item) => (
+                        <li key={item} className="flex items-start gap-2.5 text-sm leading-6 text-vx-silver">
+                          <Check size={16} className="mt-1 shrink-0 text-vx-cyan" aria-hidden />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {service.excludes[lang].length > 0 ? (
+                      <>
+                        <h4 className="catalog-heading mt-6 text-vx-muted">{t.excludes}</h4>
+                        <ul className="mt-3 space-y-2">
+                          {service.excludes[lang].map((item) => (
+                            <li key={item} className="flex items-start gap-2.5 text-sm leading-6 text-vx-muted">
+                              <X size={15} className="mt-1 shrink-0 opacity-70" aria-hidden />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    ) : null}
+
+                    <p className="catalog-best mt-6 text-sm leading-6 text-vx-muted">
+                      <strong className="font-semibold text-vx-silver">{t.bestFor}:</strong>{" "}
+                      {service.bestFor[lang]}
+                    </p>
+
+                    <div className="mt-auto pt-6">
+                      {CUSTOM_IDS.has(service.id) ? (
+                        <button
+                          type="button"
+                          onClick={requestBlueprint}
+                          className="services-price-cta services-catalog-cta"
+                        >
+                          {t.blueprintCta}
+                          <ArrowRight size={17} aria-hidden />
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => book(service)}
+                          aria-label={t.ctaAria(name)}
+                          className={`services-price-cta services-catalog-cta ${service.popular ? "is-featured" : ""}`}
+                        >
+                          <CalendarClock size={17} aria-hidden />
+                          {t.cta}
+                        </button>
+                      )}
+                    </div>
+                  </motion.article>
+                );
+              })}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        <div className="mx-auto mt-12 grid max-w-5xl gap-5 lg:grid-cols-2">
+          <div className="flex flex-col items-center justify-center gap-5 rounded-2xl border border-[rgba(34,211,238,0.28)] bg-vx-bg2 p-6 text-center sm:p-8">
+            <div>
+              <h3 className="text-xl font-bold text-vx-ink">{t.consultTitle}</h3>
+              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-vx-muted">{t.consultBody}</p>
+            </div>
             <button
               type="button"
               onClick={openConsultation}
-              className="services-price-cta services-catalog-cta is-featured mt-6 sm:w-auto sm:px-6"
+              className="services-price-cta services-catalog-cta is-featured sm:w-auto sm:px-7"
             >
               <CalendarClock size={17} aria-hidden />
               {t.cta}
             </button>
+            <p className="text-xs leading-5 text-vx-muted">{t.thirdParty}</p>
           </div>
-        ) : (
-          <>
-            {visibleCategories.length > 1 ? (
-              <div
-                role="tablist"
-                aria-label={t.tablistLabel}
-                className="services-category-tabs mx-auto mt-10"
-              >
-                {visibleCategories.map((category, index) => {
-                  const isSelected = category === active;
-                  return (
-                    <button
-                      key={category}
-                      ref={(node) => {
-                        tabRefs.current[index] = node;
-                      }}
-                      id={`${baseId}-tab-${category}`}
-                      type="button"
-                      role="tab"
-                      aria-selected={isSelected}
-                      aria-controls={`${baseId}-panel`}
-                      tabIndex={isSelected ? 0 : -1}
-                      onClick={() => setSelected(category)}
-                      onKeyDown={(event) => onTabKey(event, index)}
-                      className="services-category-tab"
-                    >
-                      {t.categories[category]}
-                    </button>
-                  );
-                })}
+
+          {showBlueprint ? (
+            <div
+              id={`${id}-blueprint`}
+              className="flex flex-col rounded-2xl border border-[rgba(148,163,184,0.16)] bg-vx-bg2 p-6 sm:p-8"
+            >
+              <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-vx-cyan">
+                {t.blueprintEyebrow}
+              </p>
+              <h3 className="mt-3 flex items-center gap-2 text-xl font-bold text-vx-ink">
+                <Compass size={20} className="text-vx-cyan" aria-hidden />
+                {AI_BLUEPRINT.name[lang]}
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-vx-muted">{AI_BLUEPRINT.line[lang]}</p>
+              <ul className="mt-4 space-y-2">
+                {AI_BLUEPRINT.includes[lang].map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm leading-6 text-vx-silver">
+                    <Check size={16} className="mt-1 shrink-0 text-vx-cyan" aria-hidden />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-auto pt-6">
+                <button
+                  type="button"
+                  onClick={requestBlueprint}
+                  className="services-price-cta services-catalog-cta"
+                >
+                  {t.blueprintCta}
+                  <ArrowRight size={17} aria-hidden />
+                </button>
               </div>
-            ) : null}
-
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={active}
-                id={`${baseId}-panel`}
-                role={visibleCategories.length > 1 ? "tabpanel" : undefined}
-                aria-labelledby={
-                  visibleCategories.length > 1 ? `${baseId}-tab-${active}` : undefined
-                }
-                className={`services-price-grid is-catalog count-${Math.min(items.length, 4)} mt-12`}
-                initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={reduceMotion ? undefined : { opacity: 0, y: -10 }}
-                transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
-              >
-                {items.map((service, index) => {
-                  const name = service.name[lang];
-                  const titleId = `${baseId}-${service.slug}`;
-                  return (
-                    <motion.article
-                      key={service.id}
-                      aria-labelledby={titleId}
-                      className={`services-price-card is-catalog ${service.featured ? "is-featured" : ""}`}
-                      initial={reduceMotion ? false : { opacity: 0, y: 14 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: reduceMotion ? 0 : index * 0.06, duration: 0.42 }}
-                    >
-                      {service.featured ? (
-                        <span className="services-popular-badge">
-                          <Sparkles size={13} aria-hidden />
-                          {t.recommended}
-                        </span>
-                      ) : null}
-
-                      <h3
-                        id={titleId}
-                        className="text-2xl font-bold tracking-[-0.03em] text-vx-ink"
-                      >
-                        {name}
-                      </h3>
-                      <p className="mt-3 text-sm leading-6 text-vx-muted">
-                        {service.description[lang]}
-                      </p>
-
-                      {service.features[lang].length > 0 ? (
-                        <ul className="mt-7 space-y-3">
-                          {service.features[lang].map((feature) => (
-                            <li
-                              key={feature}
-                              className="flex items-start gap-3 text-sm leading-6 text-vx-silver"
-                            >
-                              <Check size={17} className="mt-1 shrink-0 text-vx-cyan" aria-hidden />
-                              <span>{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : null}
-
-                      <div className="mt-auto pt-8">
-                        <button
-                          type="button"
-                          onClick={() => book(service)}
-                          aria-label={isBlueprint(service) ? t.blueprintAria : t.ctaAria(name)}
-                          className={`services-price-cta services-catalog-cta ${service.featured ? "is-featured" : ""}`}
-                        >
-                          <CalendarClock size={17} aria-hidden />
-                          {isBlueprint(service) ? t.blueprintCta : t.cta}
-                        </button>
-                      </div>
-                    </motion.article>
-                  );
-                })}
-              </motion.div>
-            </AnimatePresence>
-
-            <div className="mx-auto mt-12 flex max-w-4xl flex-col items-center gap-5 rounded-2xl border border-[rgba(34,211,238,0.28)] bg-vx-bg2 p-6 text-center sm:p-8">
-              <div>
-                <h3 className="text-xl font-bold text-vx-ink">{t.consultTitle}</h3>
-                <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-vx-muted">{t.consultBody}</p>
-              </div>
-              <button
-                type="button"
-                onClick={openConsultation}
-                className="services-price-cta services-catalog-cta is-featured sm:w-auto sm:px-7"
-              >
-                <CalendarClock size={17} aria-hidden />
-                {t.cta}
-              </button>
-              {showCustomLink ? (
-                <p className="text-sm text-vx-silver">
-                  {t.customNote}{" "}
-                  <button
-                    type="button"
-                    onClick={() => selectCategory("consulting")}
-                    className="services-catalog-cta inline-flex items-center gap-1 font-semibold text-vx-cyan underline-offset-4 hover:underline"
-                  >
-                    {t.customLink}
-                    <ArrowRight size={14} aria-hidden />
-                  </button>
-                </p>
-              ) : null}
-              <p className="text-xs leading-5 text-vx-muted">{t.thirdParty}</p>
             </div>
-          </>
-        )}
+          ) : null}
+        </div>
       </div>
     </section>
   );

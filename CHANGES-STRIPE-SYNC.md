@@ -78,3 +78,29 @@
 - Rendered with the real Stripe export + tags: 17 cards, 3 hidden, 0 errors;
   Service fee blocked even when deliberately tagged; no "$" on /services;
   EN + ES, desktop + mobile checked
+
+---
+
+# Pass 3: Command Center catalog on the website (Stripe sync removed)
+
+## Added
+- lib/services-catalog.ts: all 17 services and 5 groups from the VYNTEX Command
+  Center, EN + ES, with every price, fee, deposit, installment, term, carrier cost
+  and custom quote removed. Custom Website / Advanced AI are planned through the
+  AI Blueprint. Social Media Management no longer states its month-to-month term.
+- tests/unit/services-catalog.test.ts: no prices/terms/quotes, EN/ES parity,
+  no billing items listed as services, unique ids, 17 services.
+
+## Changed
+- components/services/ServiceCatalog.tsx: Command Center card design (name, line,
+  Ready in, What you get, What is not included, Best for, Most popular), group
+  tabs and notes, free 30-minute consultation panel, AI Blueprint panel. Every
+  card opens the consultation form pre-filled; custom items request a Blueprint.
+- ServicesHub, ServiceDetail, app/services pages: static catalog (no server fetch).
+- components/Chatbot.tsx: timeline answer references the ready-in times shown.
+- app/globals.css: catalog detail / heading / best-for styles, two-column groups.
+
+## Removed
+- lib/stripe/*, app/api/stripe/webhook, scripts/stripe-audit.ts,
+  tests/unit/stripe-catalog.test.ts, docs/STRIPE-CATALOG.md, the `stripe` and
+  `tsx` packages, the `stripe:audit` script, STRIPE_* env vars, middleware entry.

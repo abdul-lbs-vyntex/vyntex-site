@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ServiceDetail from "@/components/marketing/ServiceDetail";
 import { getService, serviceSlugs } from "@/lib/marketing-content";
-import { getServiceCatalog } from "@/lib/stripe/catalog";
-
-export const revalidate = 3600;
 
 export function generateStaticParams() {
   return serviceSlugs.map((slug) => ({ slug }));
@@ -29,6 +26,5 @@ export async function generateMetadata({
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!getService("en", slug)) notFound();
-  const catalog = await getServiceCatalog();
-  return <ServiceDetail slug={slug} catalog={catalog} />;
+  return <ServiceDetail slug={slug} />;
 }

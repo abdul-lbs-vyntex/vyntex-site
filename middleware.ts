@@ -75,10 +75,10 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   // Run on all routes except static assets, image optimization, and the Square
-  // and Stripe webhooks. Webhooks must NOT pass through the Supabase session middleware:
+  // webhook. Webhooks must NOT pass through the Supabase session middleware:
   // they are server-to-server POSTs with no cookies, and the raw body must reach
   // the route handler byte-for-byte for HMAC signature verification.
   matcher: [
-    "/((?!api/square/webhook|api/stripe/webhook|_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|gif|svg|webp|ico)$).*)",
+    "/((?!api/square/webhook|_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|gif|svg|webp|ico)$).*)",
   ],
 };
