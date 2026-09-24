@@ -55,7 +55,7 @@ export default function NotFound() {
               <Link href={`mailto:${SITE.email}`} className="hover:text-vx-blue">
                 {SITE.email}
               </Link>{" "}
-              · {SITE.phonePrimary}
+              · {SITE.phone}
             </p>
           </section>
         </Container>

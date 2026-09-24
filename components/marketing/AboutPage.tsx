@@ -18,7 +18,7 @@ export default function AboutPage() {
         title={c.title}
         description={c.intro}
         primaryHref="/contact"
-        primaryLabel={lang === "en" ? "Book a Consultation" : "Reservar una Consulta"}
+        primaryLabel={lang === "en" ? "Book a Free Consultation" : "Agenda tu Consulta Gratis"}
       />
 
       <section className="py-16 sm:py-20">

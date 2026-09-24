@@ -62,7 +62,7 @@ export default function ResellerApplyPage() {
                     Questions before you apply?
                   </h2>
                   <p className="mt-2 text-sm text-vx-muted">
-                    Call {SITE.phonePrimary} or {SITE.phoneSecondary}, or email{" "}
+                    Call or text {SITE.phone}, or email{" "}
                     {SITE.email}. We answer in English or Spanish.
                   </p>
                   <a

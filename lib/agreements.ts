@@ -232,7 +232,7 @@ export async function generateAgreementPdf(
   pages.forEach((page, index) => {
     page.drawText(
       sanitize(
-        `VYNTEX - ${SITE.email} - ${SITE.phonePrimary} - ${SITE.address.locality}, ${SITE.address.region} ${SITE.address.postalCode}   |   Agreement ${data.version}   |   Page ${index + 1} of ${pages.length}`,
+        `VYNTEX - ${SITE.email} - ${SITE.phone} - ${SITE.address.locality}, ${SITE.address.region} ${SITE.address.postalCode}   |   Agreement ${data.version}   |   Page ${index + 1} of ${pages.length}`,
       ),
       { x: MARGIN, y: 28, size: 7, font: body, color: muted },
     );

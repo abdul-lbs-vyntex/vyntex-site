@@ -32,7 +32,7 @@ export interface LegalDocument {
 
 type Lang = "en" | "es";
 
-const CONTACT = `${SITE.email} · ${SITE.phonePrimary} · ${SITE.phoneSecondary} · ${SITE.address.locality}, ${SITE.address.region} ${SITE.address.postalCode}`;
+const CONTACT = `${SITE.email} · ${SITE.phone} · ${SITE.address.locality}, ${SITE.address.region} ${SITE.address.postalCode}`;
 
 // ---------------------------------------------------------------- PRIVACY
 const privacyEn: LegalDocument = {
@@ -477,7 +477,7 @@ const a11yEn: LegalDocument = {
     {
       heading: "4. Tell us",
       paragraphs: [
-        `If any part of this site is difficult or impossible for you to use, email ${SITE.email} or call ${SITE.phonePrimary}. Describe what happened and what you were trying to do. We will respond within one business day and we will fix it.`,
+        `If any part of this site is difficult or impossible for you to use, email ${SITE.email} or call ${SITE.phone}. Describe what happened and what you were trying to do. We will respond within one business day and we will fix it.`,
       ],
     },
   ],
@@ -520,7 +520,7 @@ const a11yEs: LegalDocument = {
     {
       heading: "4. Cuéntanos",
       paragraphs: [
-        `Si alguna parte de este sitio te resulta difícil o imposible de usar, escribe a ${SITE.email} o llama al ${SITE.phonePrimary}. Describe qué pasó y qué intentabas hacer. Responderemos en un día hábil y lo arreglaremos.`,
+        `Si alguna parte de este sitio te resulta difícil o imposible de usar, escribe a ${SITE.email} o llama al ${SITE.phone}. Describe qué pasó y qué intentabas hacer. Responderemos en un día hábil y lo arreglaremos.`,
       ],
     },
   ],

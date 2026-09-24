@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MessageSquare, X, ArrowLeft, Send, Bot } from "lucide-react";
 import { useLang } from "@/context/LanguageContext";
-import { DIRECT_PRICING, LABOR_TERMS, RESELLER_PROGRAM } from "@/lib/pricing";
+import { RESELLER_PROGRAM } from "@/lib/reseller-program";
 import { SITE, SECTION_IDS } from "@/lib/site";
 import { openConsultation } from "@/components/BookConsultation";
 
@@ -11,19 +11,15 @@ import { openConsultation } from "@/components/BookConsultation";
  * VYNTEX Assistant.
  *
  * HONEST BY DESIGN. This is a deterministic assistant that answers from the
- * site's own published data (lib/pricing.ts, lib/site.ts, lib/translations.ts).
+ * site's own published data (lib/site.ts, lib/translations.ts).
  * It is NOT a large language model, and it does not pretend to be one — the
  * disclosure at the top of the panel says exactly that.
  *
  * Why not wire an LLM in? Because an LLM that hallucinates a price, a timeline,
- * or a guarantee would be a liability on a page whose entire premise is
- * "clear prices, no surprises". Every number this assistant states is read from
- * the single pricing source, so it is incapable of inventing one. For anything
- * outside its scope it hands the visitor to a human rather than guessing.
- *
- * NOTE: it can only see DIRECT_PRICING. RESELLER_PRICING is `server-only` and
- * could not be imported here even deliberately — so the assistant cannot leak
- * wholesale pricing, by construction.
+ * or a guarantee would be a liability. Service prices are NOT published on the
+ * website — they are quoted after a consultation — so this assistant never
+ * states one. It does not import the price book at all. For anything outside
+ * its scope it hands the visitor to a human rather than guessing.
  */
 
 type TopicKey =
@@ -89,31 +85,29 @@ export default function Chatbot() {
     }
   }, [messages, typing]);
 
-  /**
-   * Builds an answer. Every figure comes from lib/pricing.ts — the assistant
-   * literally cannot state a price that is not in the single source of truth.
-   */
+  /** Builds an answer. States no service prices — those are quoted after a consultation. */
   const answer = useCallback(
     (topic: TopicKey): { text: string; lines?: string[] } => {
       const es = lang === "es";
-      const price = (id: string) =>
-        DIRECT_PRICING.find((tier) => tier.id === id)?.price ?? "";
-
       switch (topic) {
         case "pricing":
           return {
             text: es
-              ? "Estos son nuestros precios publicados. Cubren solo nuestra mano de obra:"
-              : "Here is our published pricing. It covers our labor only:",
+              ? "No publicamos precios, porque el paquete adecuado depende de tu negocio. Así funciona:"
+              : "We don't publish prices, because the right package depends on your business. Here is how it works:",
             lines: [
-              `${es ? "Sitios web" : "Websites"}: ${price("web-basic")} – ${price("web-custom")}`,
-              `${es ? "Herramientas de IA" : "AI tools"}: ${price("ai-simple")} – ${price("ai-advanced")}`,
-              `CRM: ${price("crm-basic")} – ${price("crm-custom")} ${es ? "más cuota mensual" : "plus a monthly fee"}`,
-              `${es ? "Marca" : "Branding"}: ${price("brand-logo")} – ${price("brand-kit")}`,
-              `${es ? "Redes sociales" : "Social media"}: ${price("social-setup")} ${es ? "configuración" : "setup"} · ${price("social-mgmt")}${t.pricing.units.perMonth}`,
               es
-                ? "Los precios con \"+\" son punto de partida y se cotizan por proyecto."
-                : 'Prices with a "+" are starting points and are quoted per project.',
+                ? "Agenda una consulta gratis de 30 minutos"
+                : "Book a free 30-minute consultation",
+              es
+                ? "Te recomendamos el paquete que mejor te conviene y te explicamos su precio"
+                : "We recommend the package that fits and walk you through its pricing",
+              es
+                ? "¿Algo a la medida? Empezamos con un Plan de IA (AI Blueprint) que define qué construir"
+                : "Something custom? We start with an AI Blueprint that plans what to build",
+              es
+                ? "Las tarifas de plataformas de terceros se facturan por separado"
+                : "Third-party platform fees are billed separately",
             ],
           };
 
@@ -138,11 +132,11 @@ export default function Chatbot() {
 
         case "included":
           return {
-            text: es ? "Cada servicio incluye:" : "Every service includes:",
+            text: es ? "Cada proyecto incluye:" : "Every project includes:",
             lines: [
               es
-                ? `${LABOR_TERMS.supportIncludedDays} días de soporte después de la entrega`
-                : `${LABOR_TERMS.supportIncludedDays} days of support after delivery`,
+                ? "Una propuesta por escrito con el alcance antes de empezar"
+                : "A written proposal with the scope before we start",
               es ? "Construcción y entrega técnica por VYNTEX" : "Build and technical delivery by VYNTEX",
               es ? "Servicio en inglés y español" : "Service in English and Spanish",
             ],
@@ -151,8 +145,8 @@ export default function Chatbot() {
         case "thirdParty":
           return {
             text: es
-              ? "Nuestros precios cubren solo nuestra mano de obra. NO incluyen:"
-              : "Our prices cover our labor only. They do NOT include:",
+              ? "Nuestras cotizaciones cubren nuestro trabajo. NO incluyen:"
+              : "Our quotes cover our work. They do NOT include:",
             lines: [
               es ? "Hosting y dominios" : "Hosting and domains",
               es ? "Licencias de software o CRM" : "Software or CRM licenses",
@@ -192,26 +186,26 @@ export default function Chatbot() {
         case "support":
           return {
             text: es
-              ? `Cada servicio incluye ${LABOR_TERMS.supportIncludedDays} días de soporte. Después de ese periodo, los cambios se cobran a ${LABOR_TERMS.hourly}/hora (urgente ${LABOR_TERMS.rush}/hora), con un mínimo de ${LABOR_TERMS.minimumHours} hora y luego en incrementos de ${LABOR_TERMS.incrementMinutes} minutos.`
-              : `Every service includes ${LABOR_TERMS.supportIncludedDays} days of support. After that, changes are billed at ${LABOR_TERMS.hourly}/hr (rush ${LABOR_TERMS.rush}/hr), with a ${LABOR_TERMS.minimumHours}-hour minimum and ${LABOR_TERMS.incrementMinutes}-minute increments thereafter.`,
+              ? "Tu propuesta por escrito indica el soporte incluido y cómo se manejan los cambios después de la entrega. Si tienes una pregunta sobre un proyecto activo, agenda una consulta o escríbenos."
+              : "Your written proposal spells out the support included and how changes are handled after delivery. If you have a question about an active project, book a consultation or message us.",
           };
 
         case "languages":
           return {
             text: es
-              ? `Sí. Todo lo que hacemos está disponible en inglés y español — la conversación, tu sitio, tus automatizaciones y tu soporte. Llámanos al ${SITE.phonePrimary} o al ${SITE.phoneSecondary}.`
-              : `Yes. Everything we do is available in English and Spanish — the conversation, your site, your automations, and your support. Call ${SITE.phonePrimary} or ${SITE.phoneSecondary}.`,
+              ? `Sí. Todo lo que hacemos está disponible en inglés y español — la conversación, tu sitio, tus automatizaciones y tu soporte. Llámanos o escríbenos por WhatsApp al ${SITE.phone}.`
+              : `Yes. Everything we do is available in English and Spanish — the conversation, your site, your automations, and your support. Call or WhatsApp us at ${SITE.phone}.`,
           };
 
         case "contact":
           return {
             text: es
-              ? `Con gusto. Escríbenos a ${SITE.email}, llámanos al ${SITE.phonePrimary} o al ${SITE.phoneSecondary}, o agenda una consulta gratuita abajo. Respondemos en un día hábil.`
-              : `Happy to. Email ${SITE.email}, call ${SITE.phonePrimary} or ${SITE.phoneSecondary}, or book a free consultation below. We reply within one business day.`,
+              ? `Con gusto. Escríbenos a ${SITE.email}, llámanos o escríbenos por WhatsApp al ${SITE.phone}, o agenda una consulta gratis de 30 minutos abajo. Respondemos en un día hábil.`
+              : `Happy to. Email ${SITE.email}, call or WhatsApp ${SITE.phone}, or book a free 30-minute consultation below. We reply within one business day.`,
           };
       }
     },
-    [lang, t.pricing.units.perMonth],
+    [lang],
   );
 
   const ask = (topic: TopicKey) => {

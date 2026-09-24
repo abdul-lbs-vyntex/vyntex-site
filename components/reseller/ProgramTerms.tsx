@@ -2,7 +2,7 @@
 
 import { Check, ArrowRight } from "lucide-react";
 import { useLang } from "@/context/LanguageContext";
-import { RESELLER_PROGRAM } from "@/lib/pricing";
+import { RESELLER_PROGRAM } from "@/lib/reseller-program";
 import GlowCard from "@/components/ui/GlowCard";
 
 /**

@@ -46,8 +46,10 @@ describe("agreement content", () => {
   it("carries the official contact details, not the retired ones", () => {
     const text = canonicalAgreementText();
     expect(text).toContain("info@vyntexusa.com");
-    expect(text).toContain("609-813-0633");
-    expect(text).toContain("609-322-7593");
+    expect(text).toContain("609-780-3218");
+    // 609-813-0633 / 609-322-7593 belong to Lion Business Services, not VYNTEX.
+    expect(text).not.toContain("609-813-0633");
+    expect(text).not.toContain("609-322-7593");
     // The legacy file's retired details must be gone.
     expect(text).not.toContain("info@vyntex.com ");
     expect(text).not.toContain("609-317-6692");

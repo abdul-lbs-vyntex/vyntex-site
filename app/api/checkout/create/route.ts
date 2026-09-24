@@ -25,6 +25,10 @@ function siteUrl(): string {
 }
 
 /**
+ * LEGACY PARTNER CHECKOUT (Square). Public direct orders are rejected (410).
+ * Scheduled for replacement when the partner program moves to the
+ * revenue-share model and Square is removed.
+ *
  * Creates an order and returns a Square-hosted checkout URL.
  *
  * SECURITY INVARIANTS ENFORCED HERE:
@@ -66,6 +70,14 @@ export async function POST(request: Request) {
   if (!parsed.success) return json({ ok: false, code: "validation" }, 400);
   const input = parsed.data;
 
+  // Public direct checkout is RETIRED. Services are quoted after a free
+  // consultation and billed through Stripe (invoices / payment links sent by
+  // VYNTEX). This route no longer takes payment from the public; only the
+  // legacy partner flows below remain until the partner program is rebuilt.
+  if (input.orderType === "direct") {
+    return json({ ok: false, code: "direct_checkout_retired" }, 410);
+  }
+
   const user = await getUser();
 
   // Rate limit by user when signed in, otherwise by IP.
@@ -90,12 +102,8 @@ export async function POST(request: Request) {
   let clientReference: string | null = null;
   let notes: string | null = null;
 
-  if (input.orderType === "direct") {
-    customerEmail = input.email;
-    customerName = input.fullName;
-    notes = input.notes || null;
-  } else {
-    // Everything else requires a signed-in partner.
+  {
+    // Every remaining order type requires a signed-in partner.
     if (!user) return json({ ok: false, code: "session" }, 401);
 
     const access = await getPartnerAccess(user);
@@ -127,7 +135,7 @@ export async function POST(request: Request) {
 
   // ---- Authoritative pricing (server-side, from lib/pricing.ts) ----------
   const serviceKey =
-    input.orderType === "direct" || input.orderType === "partner_wholesale"
+    input.orderType === "partner_wholesale"
       ? input.serviceKey
       : undefined;
 

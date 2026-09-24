@@ -19,9 +19,29 @@ import { TextField, TextAreaField, SelectField } from "@/components/ui/FormField
 
 const OPEN_EVENT = "vx:open-consultation";
 
-/** Dispatch from anywhere to open the consultation modal. */
+type ConsultService = (typeof CONSULT_SERVICES)[number];
+
+/** Optional values used to pre-fill the modal (e.g. from a service card). */
+export interface ConsultationPrefill {
+  services?: ConsultService[];
+  message?: string;
+}
+
+/**
+ * Dispatch from anywhere to open the consultation modal. Safe to pass directly
+ * as an onClick handler — the click event argument is ignored.
+ */
 export function openConsultation(): void {
   if (typeof window !== "undefined") window.dispatchEvent(new Event(OPEN_EVENT));
+}
+
+/** Opens the consultation modal with the given service(s) and note pre-filled. */
+export function openConsultationFor(prefill: ConsultationPrefill): void {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(
+      new CustomEvent<ConsultationPrefill>(OPEN_EVENT, { detail: prefill }),
+    );
+  }
 }
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -56,12 +76,19 @@ export default function BookConsultation() {
   });
 
   useEffect(() => {
-    const onOpen = () => {
+    const onOpen = (event: Event) => {
+      const prefill: ConsultationPrefill =
+        event instanceof CustomEvent && event.detail ? (event.detail as ConsultationPrefill) : {};
       triggerRef.current = document.activeElement;
       startedAt.current = Date.now();
       setStatus("idle");
       setErrorMsg("");
-      reset({ services: [], honeypot: "", language: lang });
+      reset({
+        services: prefill.services ?? [],
+        message: prefill.message ?? "",
+        honeypot: "",
+        language: lang,
+      });
       setOpen(true);
     };
     window.addEventListener(OPEN_EVENT, onOpen);

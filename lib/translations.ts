@@ -30,7 +30,7 @@ const en = {
     getStarted: "Get Started",
     requestQuote: "Request a Quote",
     bookCall: "Book a Call",
-    bookConsultation: "Book a Consultation",
+    bookConsultation: "Book a Free Consultation",
     seePricing: "See Pricing",
     explorePricing: "Explore Pricing",
     exploreSolutions: "Explore Solutions",
@@ -66,7 +66,7 @@ const en = {
       "VYNTEX creates AI automations, websites, CRM systems, and digital solutions that help businesses capture leads, respond faster, reduce manual work, and scale with confidence.",
     ctaExplore: "Explore Solutions",
     ctaPricing: "View Pricing",
-    ctaConsult: "Book a Consultation",
+    ctaConsult: "Book a Free Consultation",
     demoLabel: "Interactive automation example",
     workflow: {
       lead: "Website lead",
@@ -550,12 +550,12 @@ const en = {
         a: "In most cases, yes. What can be connected depends on your specific systems and the scope of your project. We confirm the integrations during the Discover and Design steps.",
       },
       {
-        q: "How much does a website cost?",
-        a: "Websites start at $500 one-time for a basic site, $1,100 for a standard site, and $2,000+ for a custom build. Full pricing for every service is in the Pricing section.",
+        q: "How much does a project cost?",
+        a: "We don't publish prices, because the right package depends on your business. Book a free 30-minute consultation: we'll recommend the package that fits and walk you through its pricing. Need something custom? We start with an AI Blueprint that plans exactly what to build. Third-party platform fees (hosting, domains, software, messaging, advertising) are billed separately.",
       },
       {
-        q: "Are maintenance plans required?",
-        a: "No. Websites, tools, and branding are one-time purchases you own. Maintenance is optional. CRMs use a setup fee plus a monthly fee because they run as an ongoing system.",
+        q: "Is there a monthly fee?",
+        a: "Systems that keep running for you — such as a CRM, AI tools, or ongoing management — include a monthly plan in addition to the setup. Your written proposal shows every one-time and monthly amount before you decide.",
       },
       {
         q: "What is included in the 30-day support period?",
@@ -587,7 +587,7 @@ const en = {
       },
       {
         q: "How do I begin?",
-        a: "Contact us or book a consultation. We'll talk through your goals, then move into Discover and Design. Reach us at info@vyntexusa.com or 609-813-0633.",
+        a: "Contact us or book a consultation. We'll talk through your goals, then move into Discover and Design. Reach us at info@vyntexusa.com or call or text 609-780-3218.",
       },
     ],
   },
@@ -598,8 +598,7 @@ const en = {
       "Reach us directly, or use the form to tell us about your project. We reply within one business day.",
     labels: {
       email: "Email",
-      phonePrimary: "Primary phone",
-      phoneSecondary: "Secondary phone",
+      phone: "Phone / WhatsApp",
       location: "Location",
       area: "Service area",
       languages: "Languages",
@@ -678,10 +677,10 @@ const en = {
   },
 
   consult: {
-    openLabel: "Book a Consultation",
-    title: "Book a free consultation",
+    openLabel: "Book a Free Consultation",
+    title: "Free 30-minute consultation",
     subtitle:
-      "Tell us about your project. We reply within one business day, in English or Spanish. No sales pressure.",
+      "In 30 minutes we talk through your business, recommend the package that fits, and walk you through its pricing. We reply within one business day, in English or Spanish. No sales pressure.",
     fields: {
       name: "Full name",
       business: "Business name",
@@ -1319,7 +1318,7 @@ const en = {
     },
     backToTopics: "Ask something else",
     humanCta: "Talk to a person",
-    bookCta: "Book a consultation",
+    bookCta: "Book a free consultation",
   },
 };
 
@@ -1345,7 +1344,7 @@ const es: Dict = {
     getStarted: "Empezar",
     requestQuote: "Pedir Cotización",
     bookCall: "Agendar Llamada",
-    bookConsultation: "Agendar Consulta",
+    bookConsultation: "Agenda tu Consulta Gratis",
     seePricing: "Ver Precios",
     explorePricing: "Ver Precios",
     exploreSolutions: "Explorar Soluciones",
@@ -1381,7 +1380,7 @@ const es: Dict = {
       "VYNTEX crea automatizaciones con IA, sitios web, sistemas CRM y soluciones digitales que ayudan a los negocios a captar clientes, responder más rápido, reducir el trabajo manual y crecer con confianza.",
     ctaExplore: "Explorar Soluciones",
     ctaPricing: "Ver Precios",
-    ctaConsult: "Agendar Consulta",
+    ctaConsult: "Agenda tu Consulta Gratis",
     demoLabel: "Ejemplo interactivo de automatización",
     workflow: {
       lead: "Cliente potencial",
@@ -1865,12 +1864,12 @@ const es: Dict = {
         a: "En la mayoría de los casos, sí. Lo que se puede conectar depende de tus sistemas y del alcance de tu proyecto. Lo confirmamos durante los pasos de Descubrir y Diseñar.",
       },
       {
-        q: "¿Cuánto cuesta un sitio web?",
-        a: "Los sitios web comienzan en $500 pago único para uno básico, $1,100 para uno estándar y $2,000+ para uno a medida. Los precios completos de cada servicio están en la sección de Precios.",
+        q: "¿Cuánto cuesta un proyecto?",
+        a: "No publicamos precios, porque el paquete adecuado depende de tu negocio. Agenda una consulta gratis de 30 minutos: te recomendamos el paquete que mejor te conviene y te explicamos su precio. ¿Necesitas algo a la medida? Empezamos con un Plan de IA (AI Blueprint) que define exactamente qué construir. Las tarifas de plataformas de terceros (hosting, dominios, software, mensajería, publicidad) se facturan por separado.",
       },
       {
-        q: "¿Los planes de mantenimiento son obligatorios?",
-        a: "No. Los sitios web, herramientas y marca son compras únicas que te pertenecen. El mantenimiento es opcional. Los CRM llevan cuota de configuración más cuota mensual porque funcionan como un sistema continuo.",
+        q: "¿Hay una cuota mensual?",
+        a: "Los sistemas que siguen funcionando para ti — como un CRM, herramientas de IA o gestión continua — incluyen un plan mensual además de la configuración. Tu propuesta por escrito muestra cada monto único y mensual antes de que decidas.",
       },
       {
         q: "¿Qué incluye el periodo de soporte de 30 días?",
@@ -1902,7 +1901,7 @@ const es: Dict = {
       },
       {
         q: "¿Cómo empiezo?",
-        a: "Contáctanos o agenda una consulta. Hablamos de tus objetivos y luego pasamos a Descubrir y Diseñar. Escríbenos a info@vyntexusa.com o llama al 609-813-0633.",
+        a: "Contáctanos o agenda una consulta. Hablamos de tus objetivos y luego pasamos a Descubrir y Diseñar. Escríbenos a info@vyntexusa.com o llama o escribe al 609-780-3218.",
       },
     ],
   },
@@ -1913,8 +1912,7 @@ const es: Dict = {
       "Contáctanos directamente o usa el formulario para contarnos sobre tu proyecto. Respondemos en un día hábil.",
     labels: {
       email: "Correo",
-      phonePrimary: "Teléfono principal",
-      phoneSecondary: "Teléfono secundario",
+      phone: "Teléfono / WhatsApp",
       location: "Ubicación",
       area: "Área de servicio",
       languages: "Idiomas",
@@ -1993,10 +1991,10 @@ const es: Dict = {
   },
 
   consult: {
-    openLabel: "Agendar Consulta",
-    title: "Agenda una consulta gratis",
+    openLabel: "Agenda tu Consulta Gratis",
+    title: "Consulta gratis de 30 minutos",
     subtitle:
-      "Cuéntanos sobre tu proyecto. Respondemos en un día hábil, en inglés o español. Sin presión de ventas.",
+      "En 30 minutos hablamos de tu negocio, te recomendamos el paquete adecuado y te explicamos su precio. Respondemos en un día hábil, en inglés o español. Sin presión de ventas.",
     fields: {
       name: "Nombre completo",
       business: "Nombre del negocio",
@@ -2636,7 +2634,7 @@ const es: Dict = {
     },
     backToTopics: "Preguntar otra cosa",
     humanCta: "Hablar con una persona",
-    bookCta: "Agendar una consulta",
+    bookCta: "Agenda una consulta gratis",
   },
 };
 
