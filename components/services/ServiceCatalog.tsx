@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Check, CalendarClock, Sparkles } from "lucide-react";
+import { Check, CalendarClock, Sparkles, ArrowRight } from "lucide-react";
 import { useLang } from "@/context/LanguageContext";
 import { openConsultation, openConsultationFor } from "@/components/BookConsultation";
 import type { CONSULT_SERVICES } from "@/lib/validation/consultation";
@@ -52,23 +52,30 @@ const en = {
     consulting: "Consulting",
   } as Record<CatalogCategory, string>,
   recommended: "Recommended",
-  cta: "Book a Consultation",
-  ctaAria: (name: string) => `Book a consultation about ${name}`,
+  cta: "Book a Free Consultation",
+  ctaAria: (name: string) => `Book a free consultation about ${name}`,
   prefill: (name: string) => `I'd like to learn more about: ${name}.`,
-  pricingNote:
-    "Every project is quoted after a free consultation, with a written proposal before any work begins. Third-party platform fees are billed separately.",
+  blueprintCta: "Request an AI Blueprint",
+  blueprintAria: "Request an AI Blueprint",
+  blueprintPrefill: "I'd like to request an AI Blueprint for my business.",
+  consultTitle: "Free 30-minute consultation",
+  consultBody:
+    "We talk through your business, recommend the package that fits, and walk you through its pricing. No sales pressure, in English or Spanish.",
+  customNote: "Need something custom? We plan it with an AI Blueprint first.",
+  customLink: "See the AI Blueprint",
+  thirdParty: "Third-party platform fees (hosting, domains, software, messaging, advertising) are billed separately.",
   emptyTitle: "Our service catalog is being updated",
   emptyBody:
-    "Book a free consultation and we will walk you through every option for your business.",
+    "Book a free 30-minute consultation and we will walk you through every option for your business.",
 };
 
 type Dict = typeof en;
 
 const es: Dict = {
   eyebrow: "SERVICIOS",
-  title: "Elija el Punto de Partida Correcto",
+  title: "Elige el Punto de Partida Correcto",
   intro:
-    "Comience con un servicio específico y conecte más sistemas a medida que su negocio crece.",
+    "Empieza con un servicio específico y conecta más sistemas a medida que tu negocio crece.",
   tablistLabel: "Categorías de servicios",
   categories: {
     packages: "Paquetes",
@@ -80,14 +87,21 @@ const es: Dict = {
     consulting: "Consultoría",
   },
   recommended: "Recomendado",
-  cta: "Reservar una Consulta",
-  ctaAria: (name: string) => `Reservar una consulta sobre ${name}`,
+  cta: "Agenda tu Consulta Gratis",
+  ctaAria: (name: string) => `Agenda una consulta gratis sobre ${name}`,
   prefill: (name: string) => `Me gustaría saber más sobre: ${name}.`,
-  pricingNote:
-    "Cada proyecto se cotiza después de una consulta gratuita, con una propuesta por escrito antes de comenzar cualquier trabajo. Las tarifas de plataformas de terceros se facturan por separado.",
+  blueprintCta: "Solicita un Plan de IA",
+  blueprintAria: "Solicita un Plan de IA (AI Blueprint)",
+  blueprintPrefill: "Me gustaría solicitar un Plan de IA (AI Blueprint) para mi negocio.",
+  consultTitle: "Consulta gratis de 30 minutos",
+  consultBody:
+    "Hablamos de tu negocio, te recomendamos el paquete adecuado y te explicamos su precio. Sin presión de ventas, en inglés o en español.",
+  customNote: "¿Necesitas algo a la medida? Primero lo planificamos con un Plan de IA (AI Blueprint).",
+  customLink: "Ver el Plan de IA",
+  thirdParty: "Las tarifas de plataformas de terceros (hosting, dominios, software, mensajería, publicidad) se facturan por separado.",
   emptyTitle: "Estamos actualizando nuestro catálogo de servicios",
   emptyBody:
-    "Reserve una consulta gratuita y le explicaremos todas las opciones para su negocio.",
+    "Agenda una consulta gratis de 30 minutos y te explicamos todas las opciones para tu negocio.",
 };
 
 const DICTS: Record<Lang, Dict> = { en, es };
@@ -158,10 +172,27 @@ export default function ServiceCatalog({
     }
   };
 
+  const showCustomLink =
+    visibleCategories.includes("consulting") && active !== "consulting";
+
+  const selectCategory = (category: CatalogCategory) => {
+    setSelected(category);
+    const index = visibleCategories.indexOf(category);
+    tabRefs.current[index]?.focus();
+    document.getElementById(`${baseId}-title`)?.scrollIntoView({
+      behavior: reduceMotion ? "auto" : "smooth",
+      block: "start",
+    });
+  };
+
+  // The AI Blueprint is a paid planning engagement, not the free consultation,
+  // so its card asks for a Blueprint instead of offering a free call.
+  const isBlueprint = (service: CatalogService) => service.category === "consulting";
+
   const book = (service: CatalogService) => {
     openConsultationFor({
-      services: CONSULT_TOKEN[service.category],
-      message: t.prefill(service.name[lang]),
+      services: isBlueprint(service) ? ["ai_automation"] : CONSULT_TOKEN[service.category],
+      message: isBlueprint(service) ? t.blueprintPrefill : t.prefill(service.name[lang]),
     });
   };
 
@@ -245,7 +276,7 @@ export default function ServiceCatalog({
                 aria-labelledby={
                   visibleCategories.length > 1 ? `${baseId}-tab-${active}` : undefined
                 }
-                className="services-price-grid mt-12"
+                className={`services-price-grid is-catalog count-${Math.min(items.length, 4)} mt-12`}
                 initial={reduceMotion ? false : { opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={reduceMotion ? undefined : { opacity: 0, y: -10 }}
@@ -298,11 +329,11 @@ export default function ServiceCatalog({
                         <button
                           type="button"
                           onClick={() => book(service)}
-                          aria-label={t.ctaAria(name)}
+                          aria-label={isBlueprint(service) ? t.blueprintAria : t.ctaAria(name)}
                           className={`services-price-cta services-catalog-cta ${service.featured ? "is-featured" : ""}`}
                         >
                           <CalendarClock size={17} aria-hidden />
-                          {t.cta}
+                          {isBlueprint(service) ? t.blueprintCta : t.cta}
                         </button>
                       </div>
                     </motion.article>
@@ -311,9 +342,34 @@ export default function ServiceCatalog({
               </motion.div>
             </AnimatePresence>
 
-            <p className="mx-auto mt-10 max-w-3xl text-center text-sm leading-6 text-vx-muted">
-              {t.pricingNote}
-            </p>
+            <div className="mx-auto mt-12 flex max-w-4xl flex-col items-center gap-5 rounded-2xl border border-[rgba(34,211,238,0.28)] bg-vx-bg2 p-6 text-center sm:p-8">
+              <div>
+                <h3 className="text-xl font-bold text-vx-ink">{t.consultTitle}</h3>
+                <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-vx-muted">{t.consultBody}</p>
+              </div>
+              <button
+                type="button"
+                onClick={openConsultation}
+                className="services-price-cta services-catalog-cta is-featured sm:w-auto sm:px-7"
+              >
+                <CalendarClock size={17} aria-hidden />
+                {t.cta}
+              </button>
+              {showCustomLink ? (
+                <p className="text-sm text-vx-silver">
+                  {t.customNote}{" "}
+                  <button
+                    type="button"
+                    onClick={() => selectCategory("consulting")}
+                    className="services-catalog-cta inline-flex items-center gap-1 font-semibold text-vx-cyan underline-offset-4 hover:underline"
+                  >
+                    {t.customLink}
+                    <ArrowRight size={14} aria-hidden />
+                  </button>
+                </p>
+              ) : null}
+              <p className="text-xs leading-5 text-vx-muted">{t.thirdParty}</p>
+            </div>
           </>
         )}
       </div>

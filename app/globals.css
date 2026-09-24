@@ -537,6 +537,13 @@
   }
 }
 
+/* Catalog tabs hold 1-4 cards: keep short rows centered, 4 cards as a 2x2. */
+@media (min-width: 1024px) {
+  .services-price-grid.is-catalog.count-1 { grid-template-columns: minmax(0, 400px); justify-content: center; }
+  .services-price-grid.is-catalog.count-2 { grid-template-columns: repeat(2, minmax(0, 400px)); justify-content: center; }
+  .services-price-grid.is-catalog.count-4 { grid-template-columns: repeat(2, minmax(0, 480px)); justify-content: center; }
+}
+
 @media (max-width: 1023px) {
   .services-price-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .services-price-card:last-child { grid-column: 1 / -1; }

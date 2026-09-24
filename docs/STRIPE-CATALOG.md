@@ -27,8 +27,10 @@ Stripe and the site updates within seconds (webhook), or within 1 hour at worst.
 | Name | English name | AI Front Desk |
 | Description | English description | Bilingual AI receptionist that answers every call. |
 | Marketing features | English feature list, one per line | Answers 24/7 |
+| `vx_desc_en` | English website description (optional; overrides the Stripe description, which also appears on invoices) | Follow-up on autopilot. |
+| `vx_features_en` | English website features, separated by `\|` (optional; overrides Marketing features) | `Answers 24/7 \| Books appointments` |
 | `vx_show` | publish switch | `true` |
-| `vx_category` | section tab | `packages` · `websites` · `ai-tools` · `crm` · `branding` · `social` · `consulting` |
+| `vx_category` | section tab | `packages` · `websites` · `ai-tools` · `crm` · `branding` · `social` · `consulting` (the AI Blueprint lives here; its card says "Request an AI Blueprint") |
 | `vx_slug` | unique id, lowercase-with-hyphens | `ai-front-desk` |
 | `vx_order` | sort within its tab (optional, lower first) | `10` |
 | `vx_name_es` | Spanish name | Recepción con IA |
@@ -38,11 +40,16 @@ Stripe and the site updates within seconds (webhook), or within 1 hour at worst.
 
 ## Rules the site enforces
 
-- **Opt-in.** No `vx_show = true` → hidden. Deposit, balance, and service-fee
-  products stay off the site automatically.
+- **Opt-in.** No `vx_show = true` → hidden.
+- **Billing items are never services.** Any product whose name contains
+  "service fee", "processing fee", "convenience fee", "deposit", "balance", or
+  "domain" is blocked even if tagged by mistake.
 - **Bilingual parity.** Missing Spanish, or EN/ES feature counts that differ →
   excluded from BOTH languages.
-- **No prices.** Any text containing `$` + digits, `USD`, or `/mo`/`/mes` →
+- **Website copy vs billing copy.** When `vx_desc_en` / `vx_features_en` are
+  set, the site uses them and ignores the Stripe description / Marketing
+  features — so billing text can keep its prices.
+- **No prices.** Any website text containing `$` + digits, `USD`, or `/mo`/`/mes` →
   excluded.
 - **Unique slugs.** A duplicate `vx_slug` → the second product is excluded.
 
@@ -54,3 +61,10 @@ excluded — and exactly what to fix. It exits non-zero if anything is broken.
 ```bash
 stripe listen --forward-to localhost:3000/api/stripe/webhook
 ```
+
+## Pricing policy on the website
+
+- No prices anywhere: cards, chatbot, FAQ, metadata, structured data.
+- Every service card offers the **free 30-minute consultation** (to recommend
+  the right package and walk through its pricing).
+- No custom quotes are presented. Custom work is routed to the **AI Blueprint**.

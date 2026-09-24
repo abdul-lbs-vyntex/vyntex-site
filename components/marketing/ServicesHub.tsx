@@ -33,7 +33,7 @@ export default function ServicesHub({ catalog }: { catalog: CatalogResult }) {
         title={copy.title}
         description={copy.description}
         primaryHref="/contact"
-        primaryLabel={lang === "en" ? "Book a Consultation" : "Reservar una Consulta"}
+        primaryLabel={lang === "en" ? "Book a Free Consultation" : "Agenda tu Consulta Gratis"}
       />
 
       <ServiceCatalog id="service-catalog" services={catalog.services} available={catalog.available} />

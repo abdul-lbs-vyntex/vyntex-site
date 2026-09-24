@@ -89,8 +89,10 @@ test.describe("homepage", () => {
     await expect(page.locator("h1")).toHaveCount(1);
     const text = await page.locator("main").innerText();
     expect(text).not.toMatch(/\$\s?\d/);
+    expect(text).toMatch(/Free 30-minute consultation/i);
+    expect(text).not.toMatch(/service fee/i);
     // Either Stripe-synced cards or the honest fallback — both lead to booking.
-    await expect(page.getByRole("button", { name: /Book a Consultation/i }).first()).toBeVisible();
+    await expect(page.getByRole("button", { name: /Book a Free Consultation/i }).first()).toBeVisible();
   });
 });
 

@@ -90,6 +90,39 @@ describe("Stripe catalog parsing", () => {
     expect(build.hiddenCount).toBe(1);
   });
 
+  it("prefers website copy in metadata over billing copy that mentions a price", () => {
+    const base = product().metadata;
+    const result = parseStripeProduct(
+      product({
+        description: "One-time setup fee; requires the $397/mo subscription.",
+        marketing_features: [],
+        metadata: {
+          ...base,
+          vx_desc_en: "Follow-up on autopilot.",
+          vx_features_en: "Answers 24/7 | Books appointments",
+        },
+      }),
+    );
+    expect(result.status).toBe("published");
+    if (result.status === "published") {
+      expect(result.service.description.en).toBe("Follow-up on autopilot.");
+      expect(result.service.features.en).toEqual(["Answers 24/7", "Books appointments"]);
+    }
+  });
+
+  it("still rejects a price inside the website copy itself", () => {
+    const metadata = { ...product().metadata, vx_desc_en: "Only $397/mo." };
+    expect(parseStripeProduct(product({ metadata })).status).toBe("invalid");
+  });
+
+  it("never publishes billing line items, even when tagged", () => {
+    for (const name of ["Service fee", "Processing fee", "50% Deposit", "Remaining balance", "3 years domain + protection"]) {
+      expect(parseStripeProduct(product({ name })).status).toBe("invalid");
+    }
+    // Untagged, they are simply hidden.
+    expect(parseStripeProduct(product({ name: "Service fee", metadata: {} })).status).toBe("hidden");
+  });
+
   it("never carries price data into the published shape", () => {
     const result = parseStripeProduct(product());
     expect(JSON.stringify(result)).not.toMatch(/price|amount|unit_amount/i);

@@ -93,15 +93,18 @@ export default function Chatbot() {
         case "pricing":
           return {
             text: es
-              ? "Cada negocio es diferente, así que cotizamos cada proyecto después de una consulta gratuita. Así funciona:"
-              : "Every business is different, so we quote each project after a free consultation. Here is how it works:",
+              ? "No publicamos precios, porque el paquete adecuado depende de tu negocio. Así funciona:"
+              : "We don't publish prices, because the right package depends on your business. Here is how it works:",
             lines: [
               es
-                ? "Hablamos de tus objetivos, tus herramientas actuales y tu presupuesto"
-                : "We talk through your goals, your current tools, and your budget",
+                ? "Agenda una consulta gratis de 30 minutos"
+                : "Book a free 30-minute consultation",
               es
-                ? "Recibes una propuesta por escrito con el alcance y el costo exacto antes de empezar"
-                : "You get a written proposal with the exact scope and cost before anything starts",
+                ? "Te recomendamos el paquete que mejor te conviene y te explicamos su precio"
+                : "We recommend the package that fits and walk you through its pricing",
+              es
+                ? "¿Algo a la medida? Empezamos con un Plan de IA (AI Blueprint) que define qué construir"
+                : "Something custom? We start with an AI Blueprint that plans what to build",
               es
                 ? "Las tarifas de plataformas de terceros se facturan por separado"
                 : "Third-party platform fees are billed separately",
@@ -197,8 +200,8 @@ export default function Chatbot() {
         case "contact":
           return {
             text: es
-              ? `Con gusto. Escríbenos a ${SITE.email}, llámanos o escríbenos por WhatsApp al ${SITE.phone}, o agenda una consulta gratuita abajo. Respondemos en un día hábil.`
-              : `Happy to. Email ${SITE.email}, call or WhatsApp ${SITE.phone}, or book a free consultation below. We reply within one business day.`,
+              ? `Con gusto. Escríbenos a ${SITE.email}, llámanos o escríbenos por WhatsApp al ${SITE.phone}, o agenda una consulta gratis de 30 minutos abajo. Respondemos en un día hábil.`
+              : `Happy to. Email ${SITE.email}, call or WhatsApp ${SITE.phone}, or book a free 30-minute consultation below. We reply within one business day.`,
           };
       }
     },

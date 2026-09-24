@@ -30,7 +30,7 @@ const en = {
     getStarted: "Get Started",
     requestQuote: "Request a Quote",
     bookCall: "Book a Call",
-    bookConsultation: "Book a Consultation",
+    bookConsultation: "Book a Free Consultation",
     seePricing: "See Pricing",
     explorePricing: "Explore Pricing",
     exploreSolutions: "Explore Solutions",
@@ -66,7 +66,7 @@ const en = {
       "VYNTEX creates AI automations, websites, CRM systems, and digital solutions that help businesses capture leads, respond faster, reduce manual work, and scale with confidence.",
     ctaExplore: "Explore Solutions",
     ctaPricing: "View Pricing",
-    ctaConsult: "Book a Consultation",
+    ctaConsult: "Book a Free Consultation",
     demoLabel: "Interactive automation example",
     workflow: {
       lead: "Website lead",
@@ -551,7 +551,7 @@ const en = {
       },
       {
         q: "How much does a project cost?",
-        a: "It depends on what your business needs, so we quote every project after a free consultation. You receive a written proposal with the exact scope and cost before any work begins. Third-party platform fees (hosting, domains, software, messaging, advertising) are billed separately.",
+        a: "We don't publish prices, because the right package depends on your business. Book a free 30-minute consultation: we'll recommend the package that fits and walk you through its pricing. Need something custom? We start with an AI Blueprint that plans exactly what to build. Third-party platform fees (hosting, domains, software, messaging, advertising) are billed separately.",
       },
       {
         q: "Is there a monthly fee?",
@@ -677,10 +677,10 @@ const en = {
   },
 
   consult: {
-    openLabel: "Book a Consultation",
-    title: "Book a free consultation",
+    openLabel: "Book a Free Consultation",
+    title: "Free 30-minute consultation",
     subtitle:
-      "Tell us about your project. We reply within one business day, in English or Spanish. No sales pressure.",
+      "In 30 minutes we talk through your business, recommend the package that fits, and walk you through its pricing. We reply within one business day, in English or Spanish. No sales pressure.",
     fields: {
       name: "Full name",
       business: "Business name",
@@ -1318,7 +1318,7 @@ const en = {
     },
     backToTopics: "Ask something else",
     humanCta: "Talk to a person",
-    bookCta: "Book a consultation",
+    bookCta: "Book a free consultation",
   },
 };
 
@@ -1344,7 +1344,7 @@ const es: Dict = {
     getStarted: "Empezar",
     requestQuote: "Pedir Cotización",
     bookCall: "Agendar Llamada",
-    bookConsultation: "Agendar Consulta",
+    bookConsultation: "Agenda tu Consulta Gratis",
     seePricing: "Ver Precios",
     explorePricing: "Ver Precios",
     exploreSolutions: "Explorar Soluciones",
@@ -1380,7 +1380,7 @@ const es: Dict = {
       "VYNTEX crea automatizaciones con IA, sitios web, sistemas CRM y soluciones digitales que ayudan a los negocios a captar clientes, responder más rápido, reducir el trabajo manual y crecer con confianza.",
     ctaExplore: "Explorar Soluciones",
     ctaPricing: "Ver Precios",
-    ctaConsult: "Agendar Consulta",
+    ctaConsult: "Agenda tu Consulta Gratis",
     demoLabel: "Ejemplo interactivo de automatización",
     workflow: {
       lead: "Cliente potencial",
@@ -1865,7 +1865,7 @@ const es: Dict = {
       },
       {
         q: "¿Cuánto cuesta un proyecto?",
-        a: "Depende de lo que necesita tu negocio, por eso cotizamos cada proyecto después de una consulta gratuita. Recibes una propuesta por escrito con el alcance y el costo exacto antes de comenzar. Las tarifas de plataformas de terceros (hosting, dominios, software, mensajería, publicidad) se facturan por separado.",
+        a: "No publicamos precios, porque el paquete adecuado depende de tu negocio. Agenda una consulta gratis de 30 minutos: te recomendamos el paquete que mejor te conviene y te explicamos su precio. ¿Necesitas algo a la medida? Empezamos con un Plan de IA (AI Blueprint) que define exactamente qué construir. Las tarifas de plataformas de terceros (hosting, dominios, software, mensajería, publicidad) se facturan por separado.",
       },
       {
         q: "¿Hay una cuota mensual?",
@@ -1991,10 +1991,10 @@ const es: Dict = {
   },
 
   consult: {
-    openLabel: "Agendar Consulta",
-    title: "Agenda una consulta gratis",
+    openLabel: "Agenda tu Consulta Gratis",
+    title: "Consulta gratis de 30 minutos",
     subtitle:
-      "Cuéntanos sobre tu proyecto. Respondemos en un día hábil, en inglés o español. Sin presión de ventas.",
+      "En 30 minutos hablamos de tu negocio, te recomendamos el paquete adecuado y te explicamos su precio. Respondemos en un día hábil, en inglés o español. Sin presión de ventas.",
     fields: {
       name: "Nombre completo",
       business: "Nombre del negocio",
@@ -2634,7 +2634,7 @@ const es: Dict = {
     },
     backToTopics: "Preguntar otra cosa",
     humanCta: "Hablar con una persona",
-    bookCta: "Agendar una consulta",
+    bookCta: "Agenda una consulta gratis",
   },
 };
 

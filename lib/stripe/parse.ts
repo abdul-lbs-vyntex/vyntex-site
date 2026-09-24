@@ -12,6 +12,12 @@ import { z } from "zod";
  * `default_price`. The public site describes services; amounts are quoted after
  * a consultation. A description that sneaks a price in is rejected.
  *
+ * WEBSITE COPY vs BILLING COPY. The Stripe product description also appears on
+ * invoices and payment pages, and usually mentions the price. So the website
+ * prefers `vx_desc_en` / `vx_features_en` from metadata when present and falls
+ * back to the product description / Marketing features only when absent.
+ * Billing text in Stripe never has to change to keep prices off the site.
+ *
  * PUBLISHING IS OPT-IN. A product appears on the site only when its metadata has
  * `vx_show = "true"`. Deposit, balance, and service-fee products stay hidden by
  * default.
@@ -79,11 +85,20 @@ const metadataSchema = z.object({
     .trim()
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "must be lowercase-with-hyphens"),
   vx_order: z.coerce.number().int().min(0).max(9999).optional(),
+  vx_desc_en: z.string().trim().min(1).max(500).optional(),
+  vx_features_en: z.string().optional(),
   vx_name_es: z.string().trim().min(1).max(120),
   vx_desc_es: z.string().trim().min(1).max(500),
   vx_features_es: z.string().optional(),
   vx_featured: z.enum(["true", "false"]).optional(),
 });
+
+/**
+ * Billing line items (service fee, deposits, balances, domain pass-throughs)
+ * are NEVER services, so they are never published — even if tagged by mistake.
+ */
+export const BILLING_ONLY_PATTERN =
+  /\b(service fee|processing fee|convenience fee|deposit|balance|domain)\b/i;
 
 /** Anything that reads like an amount. Prices are not published on the site. */
 export const PRICE_PATTERN = /\$\s?\d|\bUSD\b|\/\s?(mo|mes|month|mensual)\b/i;
@@ -100,6 +115,17 @@ export function parseStripeProduct(product: CatalogProductInput): ParseResult {
     return { status: "hidden" };
   }
 
+  if (BILLING_ONLY_PATTERN.test(product.name)) {
+    return {
+      status: "invalid",
+      product: {
+        productId: product.id,
+        productName: product.name.trim(),
+        issues: ["billing line item (fee / deposit / balance / domain) — never published; remove vx_show"],
+      },
+    };
+  }
+
   const issues: string[] = [];
   const meta = metadataSchema.safeParse(product.metadata);
 
@@ -110,16 +136,24 @@ export function parseStripeProduct(product: CatalogProductInput): ParseResult {
   }
 
   const nameEn = product.name.trim();
-  const descEn = (product.description ?? "").trim();
-  const featuresEn = (product.marketing_features ?? [])
-    .map((feature) => feature.name?.trim() ?? "")
-    .filter(Boolean);
+  // Website copy (metadata) wins over billing copy (product fields).
+  const descEn = (
+    (meta.success ? meta.data.vx_desc_en : undefined) ??
+    product.description ??
+    ""
+  ).trim();
+  const featuresEn =
+    meta.success && meta.data.vx_features_en !== undefined
+      ? splitList(meta.data.vx_features_en)
+      : (product.marketing_features ?? [])
+          .map((feature) => feature.name?.trim() ?? "")
+          .filter(Boolean);
   const featuresEs = meta.success ? splitList(meta.data.vx_features_es) : [];
 
   if (!descEn) issues.push("description (EN): empty");
   if (meta.success && featuresEn.length !== featuresEs.length) {
     issues.push(
-      `features: ${featuresEn.length} EN (Marketing features) vs ${featuresEs.length} ES (vx_features_es)`,
+      `features: ${featuresEn.length} EN vs ${featuresEs.length} ES (vx_features_es)`,
     );
   }
 

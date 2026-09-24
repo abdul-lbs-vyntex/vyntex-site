@@ -49,3 +49,32 @@
 - Terms of Service still reference "published prices" — needs owner approval
 - Site-wide canonical bug (layout canonical "/"): fixed on services pages only
 - Spanish is a client-side toggle, not indexable locale routes
+
+---
+
+# Pass 2: website copy fields, free consultation, AI Blueprint routing
+
+## Changed
+- lib/stripe/parse.ts: `vx_desc_en` / `vx_features_en` website copy (billing text in
+  Stripe keeps its prices); billing line items (service fee, deposit, balance,
+  domain) are never published, even if tagged
+- components/services/ServiceCatalog.tsx: "Free 30-minute consultation" panel,
+  "Need something custom? AI Blueprint" link, Blueprint card CTA "Request an
+  AI Blueprint", centered 1/2/4-card layouts, Spanish in tú
+- lib/translations.ts: CTAs "Book a Free Consultation" / "Agenda tu Consulta
+  Gratis"; consultation modal "Free 30-minute consultation"; pricing FAQ (EN/ES)
+- components/Chatbot.tsx: pricing answer points to the free 30-minute
+  consultation and the AI Blueprint for custom work
+- components/home/ConnectedHero.tsx, components/marketing/AboutPage.tsx,
+  components/marketing/ServicesHub.tsx, components/marketing/ServiceDetail.tsx,
+  lib/marketing-content.ts, app/services/page.tsx: consultation wording
+- app/globals.css: centered catalog grids
+- tests: stripe-catalog (billing-item + website-copy cases), e2e expectations,
+  wholesale-isolation Windows path fix
+- docs/STRIPE-CATALOG.md
+
+## Verified
+- tsc clean, eslint clean, vitest 105/105, next build success
+- Rendered with the real Stripe export + tags: 17 cards, 3 hidden, 0 errors;
+  Service fee blocked even when deliberately tagged; no "$" on /services;
+  EN + ES, desktop + mobile checked
