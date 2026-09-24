@@ -18,16 +18,16 @@ export default function Footer({ showCta = true }: { showCta?: boolean }) {
     services: "Servicios",
     company: "Empresa",
     contact: "Contacto",
-    ctaTitle: "¿Listo para simplificar su negocio?",
-    ctaBody: "Comience con una consulta clara y sin presión.",
-    cta: "Reservar Consulta",
+    ctaTitle: "¿Listo para simplificar tu negocio?",
+    ctaBody: "Empieza con una consulta gratis de 30 minutos, sin presión.",
+    cta: "Agenda tu Consulta Gratis",
   } : {
     services: "Services",
     company: "Company",
     contact: "Contact",
     ctaTitle: "Ready to simplify your business?",
-    ctaBody: "Start with a clear, no-pressure consultation.",
-    cta: "Book Consultation",
+    ctaBody: "Start with a free 30-minute consultation. No pressure.",
+    cta: "Book a Free Consultation",
   };
 
   return (

@@ -9,8 +9,8 @@ import { openConsultation } from "@/components/BookConsultation";
 import { useLang } from "@/context/LanguageContext";
 
 const copy = {
-  en: { title: "Ready to Simplify Your Business?", body: "Stop managing disconnected tools. Let VYNTEX build a connected business system around your company.", button: "Book Your Consultation" },
-  es: { title: "¿Listo para Simplificar su Negocio?", body: "Deje de administrar herramientas desconectadas. Permita que VYNTEX cree un sistema empresarial conectado alrededor de su compañía.", button: "Reservar su Consulta" },
+  en: { title: "Ready to Simplify Your Business?", body: "Stop managing disconnected tools. Let VYNTEX build a connected business system around your company.", button: "Book a Free Consultation" },
+  es: { title: "¿Listo para Simplificar su Negocio?", body: "Deje de administrar herramientas desconectadas. Permita que VYNTEX cree un sistema empresarial conectado alrededor de su compañía.", button: "Agenda tu Consulta Gratis" },
 } as const;
 
 export default function FinalSystemCTA() {
