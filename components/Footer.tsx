@@ -78,8 +78,7 @@ export default function Footer({ showCta = true }: { showCta?: boolean }) {
             <h2 className="font-mono text-xs uppercase tracking-[0.18em] text-vx-blue">{words.contact}</h2>
             <ul className="mt-4 space-y-3 text-sm">
               <li><a href={CONTACT_HREFS.email} className="inline-flex items-center gap-2 text-vx-silver hover:text-vx-ink"><Mail size={15}/>{SITE.email}</a></li>
-              <li><a href={CONTACT_HREFS.phonePrimary} className="inline-flex items-center gap-2 text-vx-silver hover:text-vx-ink"><Phone size={15}/>{SITE.phonePrimary}</a></li>
-              <li><a href={CONTACT_HREFS.phoneSecondary} className="inline-flex items-center gap-2 text-vx-silver hover:text-vx-ink"><Phone size={15}/>{SITE.phoneSecondary}</a></li>
+              <li><a href={CONTACT_HREFS.phone} className="inline-flex items-center gap-2 text-vx-silver hover:text-vx-ink"><Phone size={15}/>{SITE.phone}</a></li>
             </ul>
           </div>
         </div>

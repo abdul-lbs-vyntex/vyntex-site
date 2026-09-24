@@ -76,8 +76,21 @@ test.describe("homepage", () => {
     for (const figure of wholesaleOnly) {
       expect(all, `wholesale figure ${figure} leaked to the public`).not.toContain(figure);
     }
-    // Sanity: retail pricing IS public and should be present.
-    expect(all).toContain("$1,100");
+    // Service prices are no longer published. Services sync from Stripe and
+    // are quoted after a consultation, so retail figures must be absent too.
+    const retailFigures = ["$1,100", "$1,500", "$2,000+", "$4,000+", "$149/mo", "$95"];
+    for (const figure of retailFigures) {
+      expect(all, `retail price ${figure} is still published`).not.toContain(figure);
+    }
+  });
+
+  test("services page shows no prices and books consultations", async ({ page }) => {
+    await page.goto("/services");
+    await expect(page.locator("h1")).toHaveCount(1);
+    const text = await page.locator("main").innerText();
+    expect(text).not.toMatch(/\$\s?\d/);
+    // Either Stripe-synced cards or the honest fallback — both lead to booking.
+    await expect(page.getByRole("button", { name: /Book a Consultation/i }).first()).toBeVisible();
   });
 });
 
@@ -119,15 +132,17 @@ test.describe("reseller application", () => {
 });
 
 test.describe("checkout", () => {
-  test("shows an order summary and NO card fields", async ({ page }) => {
+  test("public checkout is retired and redirects to services", async ({ page }) => {
     await page.goto("/checkout?service=web-standard");
-    await expect(page.getByText("$1,100").first()).toBeVisible();
+    await expect(page).toHaveURL(/\/services$/);
+  });
 
-    // Card data must never be entered on our origin. There is no card input,
-    // by design — Square's hosted page collects it.
-    await expect(page.locator("input[autocomplete*='cc-']")).toHaveCount(0);
-    await expect(page.locator("input[name*='card' i]")).toHaveCount(0);
-    await expect(page.locator("input[name*='cvv' i]")).toHaveCount(0);
+  test("the API refuses public direct orders", async ({ request }) => {
+    const res = await request.post("/api/checkout/create", {
+      data: { orderType: "direct", serviceKey: "web-standard" },
+    });
+    // 410 when reached; 400/503 if validation or payment config short-circuits first.
+    expect([400, 410, 503]).toContain(res.status());
   });
 });
 

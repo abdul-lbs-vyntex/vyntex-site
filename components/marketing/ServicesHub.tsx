@@ -6,7 +6,8 @@ import { useLang } from "@/context/LanguageContext";
 import { servicesByLang, pageCopy } from "@/lib/marketing-content";
 import PageShell from "@/components/marketing/PageShell";
 import MarketingHero from "@/components/marketing/MarketingHero";
-import ServicesPricingShowcase from "@/components/marketing/ServicesPricingShowcase";
+import ServiceCatalog from "@/components/services/ServiceCatalog";
+import type { CatalogResult } from "@/lib/stripe/catalog";
 import Container from "@/components/ui/Container";
 
 const serviceOrder = [
@@ -18,7 +19,7 @@ const serviceOrder = [
   "branding",
 ];
 
-export default function ServicesHub() {
+export default function ServicesHub({ catalog }: { catalog: CatalogResult }) {
   const { lang } = useLang();
   const copy = pageCopy[lang].services;
   const services = [...servicesByLang[lang]].sort(
@@ -35,7 +36,7 @@ export default function ServicesHub() {
         primaryLabel={lang === "en" ? "Book a Consultation" : "Reservar una Consulta"}
       />
 
-      <ServicesPricingShowcase />
+      <ServiceCatalog id="service-catalog" services={catalog.services} available={catalog.available} />
 
       <section className="border-t border-vx-line py-16 sm:py-20">
         <Container>

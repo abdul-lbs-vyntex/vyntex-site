@@ -56,7 +56,8 @@ describe("wholesale pricing isolation", () => {
 
   it("RESELLER_PRICING lives ONLY in the server-only module", () => {
     const offenders = sourceFiles.filter((file) => {
-      if (file.endsWith("lib/pricing-reseller.ts")) return false;
+            // Normalize Windows backslashes so this check works on every OS.
+      if (file.replace(/\\/g, "/").endsWith("lib/pricing-reseller.ts")) return false;
       const src = readFileSync(file, "utf8");
       // Declaration, not a reference in a comment or an import.
       return /export\s+const\s+RESELLER_PRICING/.test(src);

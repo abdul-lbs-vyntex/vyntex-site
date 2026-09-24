@@ -1,5 +1,12 @@
+import { RESELLER_PROGRAM } from "@/lib/reseller-program";
+
 /**
- * VYNTEX pricing — SINGLE SOURCE OF TRUTH.
+ * VYNTEX pricing — LEGACY INTERNAL PRICE BOOK.
+ *
+ * As of the Stripe migration, prices are NOT shown on the public website.
+ * Services and their descriptions sync from Stripe (lib/stripe/*); amounts are
+ * quoted after a consultation. This file remains only for the legacy partner
+ * portal and order code, and must not be imported by public pages.
  *
  * Every price shown anywhere on the site (pricing cards, checkout, chatbot,
  * reseller portal, structured data, emails) must read from this file. Do not
@@ -80,12 +87,8 @@ export const LABOR_TERMS = {
   crmBuyoutRange: "$6,000–$10,000",
 } as const;
 
-/** Reseller program terms (from the reseller agreement). */
-export const RESELLER_PROGRAM = {
-  activationFee: "$199",
-  activationPeriodKey: "perYear",
-  minimumResalesPerYear: 4,
-} as const;
+/** Reseller program terms — defined in lib/reseller-program.ts (public-safe). */
+export { RESELLER_PROGRAM };
 
 export const PRICING_CATEGORIES: ServiceCategory[] = [
   "websites",

@@ -26,16 +26,9 @@ export function organizationSchema() {
     contactPoint: [
       {
         "@type": "ContactPoint",
-        telephone: `+1-${SITE.phonePrimary}`,
+        telephone: `+1-${SITE.phone}`,
         contactType: "customer service",
         email: SITE.email,
-        areaServed: "US",
-        availableLanguage: ["English", "Spanish"],
-      },
-      {
-        "@type": "ContactPoint",
-        telephone: `+1-${SITE.phoneSecondary}`,
-        contactType: "sales",
         areaServed: "US",
         availableLanguage: ["English", "Spanish"],
       },
@@ -50,7 +43,7 @@ export function professionalServiceSchema() {
     name: SITE.name,
     url: SITE.url,
     email: SITE.email,
-    telephone: `+1-${SITE.phonePrimary}`,
+    telephone: `+1-${SITE.phone}`,
     address: postalAddress,
     areaServed: { "@type": "Country", name: SITE.serviceArea },
     availableLanguage: ["English", "Spanish"],

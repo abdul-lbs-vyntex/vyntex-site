@@ -14,7 +14,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { useLang } from "@/context/LanguageContext";
-import { RESELLER_PROGRAM } from "@/lib/pricing";
+import { RESELLER_PROGRAM } from "@/lib/reseller-program";
 import { SECTION_IDS } from "@/lib/site";
 import GlowCard from "@/components/ui/GlowCard";
 import Button from "@/components/ui/Button";

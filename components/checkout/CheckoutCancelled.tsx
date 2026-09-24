@@ -22,7 +22,7 @@ export default function CheckoutCancelled() {
         </p>
       </div>
       <div className="flex flex-wrap items-center justify-center gap-3">
-        <Button href="/checkout" variant="primary">
+        <Button href="/portal" variant="primary">
           {c.retry}
         </Button>
         <Button href={`/#${SECTION_IDS.contact}`} variant="ghost">

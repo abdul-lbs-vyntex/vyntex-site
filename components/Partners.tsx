@@ -3,7 +3,7 @@
 import { Check, Lock } from "lucide-react";
 import { useLang } from "@/context/LanguageContext";
 import { SECTION_IDS } from "@/lib/site";
-import { RESELLER_PROGRAM } from "@/lib/pricing";
+import { RESELLER_PROGRAM } from "@/lib/reseller-program";
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
 import GlowCard from "@/components/ui/GlowCard";

@@ -521,11 +521,28 @@
     border-color: rgba(34, 211, 238, 0.3);
   }
   .service-explorer-card:hover::before { transform: translateX(100%); }
+
+  /* Stripe-synced service catalog: no price block, so cards size to content. */
+  .services-price-card.is-catalog { min-height: 0; }
+  .services-catalog-cta {
+    appearance: none;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 800;
+  }
+  .services-catalog-cta:focus-visible,
+  .services-category-tab:focus-visible {
+    outline: 2px solid var(--vx-cyan);
+    outline-offset: 3px;
+  }
 }
 
 @media (max-width: 1023px) {
   .services-price-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .services-price-card:last-child { grid-column: 1 / -1; }
+  /* Catalog card counts vary: only an odd trailing card spans both columns. */
+  .services-price-card.is-catalog:last-child { grid-column: auto; }
+  .services-price-card.is-catalog:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 
 @media (max-width: 767px) {

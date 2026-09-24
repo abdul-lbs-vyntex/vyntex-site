@@ -105,14 +105,9 @@ export default function Contact() {
                   {SITE.email}
                 </a>
               </Row>
-              <Row icon={<Phone size={18} aria-hidden />} label={t.contact.labels.phonePrimary}>
-                <a href={CONTACT_HREFS.phonePrimary} className="text-vx-silver hover:text-vx-ink">
-                  {SITE.phonePrimary}
-                </a>
-              </Row>
-              <Row icon={<Phone size={18} aria-hidden />} label={t.contact.labels.phoneSecondary}>
-                <a href={CONTACT_HREFS.phoneSecondary} className="text-vx-silver hover:text-vx-ink">
-                  {SITE.phoneSecondary}
+              <Row icon={<Phone size={18} aria-hidden />} label={t.contact.labels.phone}>
+                <a href={CONTACT_HREFS.phone} className="text-vx-silver hover:text-vx-ink">
+                  {SITE.phone}
                 </a>
               </Row>
               <Row icon={<MapPin size={18} aria-hidden />} label={t.contact.labels.location}>
@@ -215,8 +210,8 @@ export default function Contact() {
                     {SITE.email}
                   </a>{" "}
                   ·{" "}
-                  <a href={CONTACT_HREFS.phonePrimary} className="text-vx-blue hover:text-vx-cyan">
-                    {SITE.phonePrimary}
+                  <a href={CONTACT_HREFS.phone} className="text-vx-blue hover:text-vx-cyan">
+                    {SITE.phone}
                   </a>
                 </p>
               </form>

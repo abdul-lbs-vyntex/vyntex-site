@@ -68,7 +68,7 @@ export default function Error({
         </div>
 
         <p className="text-xs text-vx-silver-dim">
-          {SITE.email} · {SITE.phonePrimary}
+          {SITE.email} · {SITE.phone}
         </p>
       </div>
     </main>

@@ -263,11 +263,11 @@ export default function Nav() {
             <div className="flex items-center justify-between">
               <LanguageToggle />
               <a
-                href={CONTACT_HREFS.phonePrimary}
+                href={CONTACT_HREFS.phone}
                 className="inline-flex items-center gap-2 font-mono text-sm text-vx-silver"
               >
                 <Phone size={15} aria-hidden />
-                {SITE.phonePrimary}
+                {SITE.phone}
               </a>
             </div>
             {authed ? (

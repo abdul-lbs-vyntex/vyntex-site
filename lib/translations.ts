@@ -550,12 +550,12 @@ const en = {
         a: "In most cases, yes. What can be connected depends on your specific systems and the scope of your project. We confirm the integrations during the Discover and Design steps.",
       },
       {
-        q: "How much does a website cost?",
-        a: "Websites start at $500 one-time for a basic site, $1,100 for a standard site, and $2,000+ for a custom build. Full pricing for every service is in the Pricing section.",
+        q: "How much does a project cost?",
+        a: "It depends on what your business needs, so we quote every project after a free consultation. You receive a written proposal with the exact scope and cost before any work begins. Third-party platform fees (hosting, domains, software, messaging, advertising) are billed separately.",
       },
       {
-        q: "Are maintenance plans required?",
-        a: "No. Websites, tools, and branding are one-time purchases you own. Maintenance is optional. CRMs use a setup fee plus a monthly fee because they run as an ongoing system.",
+        q: "Is there a monthly fee?",
+        a: "Systems that keep running for you — such as a CRM, AI tools, or ongoing management — include a monthly plan in addition to the setup. Your written proposal shows every one-time and monthly amount before you decide.",
       },
       {
         q: "What is included in the 30-day support period?",
@@ -587,7 +587,7 @@ const en = {
       },
       {
         q: "How do I begin?",
-        a: "Contact us or book a consultation. We'll talk through your goals, then move into Discover and Design. Reach us at info@vyntexusa.com or 609-813-0633.",
+        a: "Contact us or book a consultation. We'll talk through your goals, then move into Discover and Design. Reach us at info@vyntexusa.com or call or text 609-780-3218.",
       },
     ],
   },
@@ -598,8 +598,7 @@ const en = {
       "Reach us directly, or use the form to tell us about your project. We reply within one business day.",
     labels: {
       email: "Email",
-      phonePrimary: "Primary phone",
-      phoneSecondary: "Secondary phone",
+      phone: "Phone / WhatsApp",
       location: "Location",
       area: "Service area",
       languages: "Languages",
@@ -1865,12 +1864,12 @@ const es: Dict = {
         a: "En la mayoría de los casos, sí. Lo que se puede conectar depende de tus sistemas y del alcance de tu proyecto. Lo confirmamos durante los pasos de Descubrir y Diseñar.",
       },
       {
-        q: "¿Cuánto cuesta un sitio web?",
-        a: "Los sitios web comienzan en $500 pago único para uno básico, $1,100 para uno estándar y $2,000+ para uno a medida. Los precios completos de cada servicio están en la sección de Precios.",
+        q: "¿Cuánto cuesta un proyecto?",
+        a: "Depende de lo que necesita tu negocio, por eso cotizamos cada proyecto después de una consulta gratuita. Recibes una propuesta por escrito con el alcance y el costo exacto antes de comenzar. Las tarifas de plataformas de terceros (hosting, dominios, software, mensajería, publicidad) se facturan por separado.",
       },
       {
-        q: "¿Los planes de mantenimiento son obligatorios?",
-        a: "No. Los sitios web, herramientas y marca son compras únicas que te pertenecen. El mantenimiento es opcional. Los CRM llevan cuota de configuración más cuota mensual porque funcionan como un sistema continuo.",
+        q: "¿Hay una cuota mensual?",
+        a: "Los sistemas que siguen funcionando para ti — como un CRM, herramientas de IA o gestión continua — incluyen un plan mensual además de la configuración. Tu propuesta por escrito muestra cada monto único y mensual antes de que decidas.",
       },
       {
         q: "¿Qué incluye el periodo de soporte de 30 días?",
@@ -1902,7 +1901,7 @@ const es: Dict = {
       },
       {
         q: "¿Cómo empiezo?",
-        a: "Contáctanos o agenda una consulta. Hablamos de tus objetivos y luego pasamos a Descubrir y Diseñar. Escríbenos a info@vyntexusa.com o llama al 609-813-0633.",
+        a: "Contáctanos o agenda una consulta. Hablamos de tus objetivos y luego pasamos a Descubrir y Diseñar. Escríbenos a info@vyntexusa.com o llama o escribe al 609-780-3218.",
       },
     ],
   },
@@ -1913,8 +1912,7 @@ const es: Dict = {
       "Contáctanos directamente o usa el formulario para contarnos sobre tu proyecto. Respondemos en un día hábil.",
     labels: {
       email: "Correo",
-      phonePrimary: "Teléfono principal",
-      phoneSecondary: "Teléfono secundario",
+      phone: "Teléfono / WhatsApp",
       location: "Ubicación",
       area: "Área de servicio",
       languages: "Idiomas",

@@ -23,7 +23,7 @@
  */
 
 import { SITE } from "@/lib/site";
-import { RESELLER_PROGRAM } from "@/lib/pricing";
+import { RESELLER_PROGRAM } from "@/lib/reseller-program";
 
 export const AGREEMENT_VERSION = "2.0";
 
@@ -60,7 +60,7 @@ export interface AgreementDocument {
   };
 }
 
-const CONTACT_LINE = `${SITE.email} · ${SITE.phonePrimary} · ${SITE.phoneSecondary} · ${SITE.address.locality}, ${SITE.address.region} ${SITE.address.postalCode}`;
+const CONTACT_LINE = `${SITE.email} · ${SITE.phone} · ${SITE.address.locality}, ${SITE.address.region} ${SITE.address.postalCode}`;
 const FEE = RESELLER_PROGRAM.activationFee;
 const MIN = RESELLER_PROGRAM.minimumResalesPerYear;
 

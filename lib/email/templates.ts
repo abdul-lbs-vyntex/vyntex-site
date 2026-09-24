@@ -108,7 +108,7 @@ ${bodyHtml}
 </td></tr>
 <tr><td style="padding:18px 28px;border-top:1px solid #E5E7EB;font-size:12px;color:#6B7280;">
 VYNTEX · ${esc(SITE.address.locality)}, ${esc(SITE.address.region)} ${esc(SITE.address.postalCode)}<br>
-${esc(SITE.email)} · ${esc(SITE.phonePrimary)} · ${esc(SITE.phoneSecondary)}
+${esc(SITE.email)} · ${esc(SITE.phone)}
 </td></tr>
 </table></body></html>`;
 }
@@ -184,7 +184,7 @@ ${row(lang === "es" ? "Servicio" : "Service", svc)}
 </table>
 <div style="margin-top:8px;padding:14px;background:#F9FAFB;border-radius:8px;font-size:13px;color:#111827;white-space:pre-wrap;">${esc(d.message)}</div>
 <p style="font-size:13px;color:#374151;margin:18px 0 4px;font-weight:bold;">${esc(reachLabel)}</p>
-<p style="font-size:13px;color:#374151;margin:0;">${esc(SITE.phonePrimary)} · ${esc(SITE.phoneSecondary)} · ${esc(SITE.email)}</p>`,
+<p style="font-size:13px;color:#374151;margin:0;">${esc(SITE.phone)} · ${esc(SITE.email)}</p>`,
     bodyIntro,
   );
   const text = `${greeting}
@@ -197,7 +197,7 @@ ${lang === "es" ? "Servicio" : "Service"}: ${svc}
 ${d.message}
 
 ${reachLabel}
-${SITE.phonePrimary} · ${SITE.phoneSecondary} · ${SITE.email}
+${SITE.phone} · ${SITE.email}
 
 — VYNTEX`;
   return { subject, html, text };
@@ -277,7 +277,7 @@ ${row(lang === "es" ? "Servicios" : "Services", services)}
 ${row(lang === "es" ? "Presupuesto" : "Budget", BUDGET_LABELS[lang][d.budget] ?? d.budget)}
 ${row(lang === "es" ? "Tiempo" : "Timeline", TIMELINE_LABELS[lang][d.timeline] ?? d.timeline)}
 </table>
-<p style="font-size:13px;color:#374151;margin:18px 0 0;">${esc(SITE.phonePrimary)} · ${esc(SITE.phoneSecondary)} · ${esc(SITE.email)}</p>`,
+<p style="font-size:13px;color:#374151;margin:18px 0 0;">${esc(SITE.phone)} · ${esc(SITE.email)}</p>`,
     intro,
   );
   const text = `${greeting}
@@ -289,7 +289,7 @@ ${lang === "es" ? "Servicios" : "Services"}: ${services}
 ${lang === "es" ? "Presupuesto" : "Budget"}: ${BUDGET_LABELS[lang][d.budget] ?? d.budget}
 ${lang === "es" ? "Tiempo" : "Timeline"}: ${TIMELINE_LABELS[lang][d.timeline] ?? d.timeline}
 
-${SITE.phonePrimary} · ${SITE.phoneSecondary} · ${SITE.email}
+${SITE.phone} · ${SITE.email}
 
 — VYNTEX`;
   return { subject, html, text };
@@ -480,7 +480,7 @@ export function resellerApplicationConfirmation(
 ${steps.map((s) => `<li style="margin-bottom:6px;">${esc(s)}</li>`).join("")}
 </ol>
 <p style="font-size:12px;color:#6B7280;margin:0 0 18px;font-style:italic;">${esc(note)}</p>
-<p style="font-size:13px;color:#374151;margin:0;">${esc(SITE.phonePrimary)} · ${esc(SITE.phoneSecondary)} · ${esc(SITE.email)}</p>`,
+<p style="font-size:13px;color:#374151;margin:0;">${esc(SITE.phone)} · ${esc(SITE.email)}</p>`,
     intro,
   );
 
@@ -493,7 +493,7 @@ ${steps.map((s, i) => `${i + 1}. ${s}`).join("\n")}
 
 ${note}
 
-${SITE.phonePrimary} · ${SITE.phoneSecondary} · ${SITE.email}
+${SITE.phone} · ${SITE.email}
 
 — VYNTEX`;
 
@@ -547,7 +547,7 @@ ${steps.map((s) => `<li style="margin-bottom:6px;">${esc(s)}</li>`).join("")}
 </ol>
 <p style="margin:0 0 18px;"><a href="${esc(d.portalUrl)}" style="display:inline-block;background:#0EA5E9;color:#050714;font-weight:bold;font-size:13px;text-decoration:none;padding:11px 20px;border-radius:8px;">${esc(lang === "es" ? "Abrir mi portal de socio" : "Open my partner portal")}</a></p>
 <p style="font-size:13px;color:#374151;margin:0 0 6px;">${esc(closing)}</p>
-<p style="font-size:13px;color:#374151;margin:0;">${esc(SITE.phonePrimary)} · ${esc(SITE.phoneSecondary)} · ${esc(SITE.email)}</p>`,
+<p style="font-size:13px;color:#374151;margin:0;">${esc(SITE.phone)} · ${esc(SITE.email)}</p>`,
     intro,
   );
 
@@ -562,7 +562,7 @@ ${d.portalUrl}
 
 ${closing}
 
-${SITE.phonePrimary} · ${SITE.phoneSecondary} · ${SITE.email}
+${SITE.phone} · ${SITE.email}
 
 — VYNTEX`;
 
@@ -647,7 +647,7 @@ ${row("SHA-256", d.agreementHash)}
 </table>
 <p style="font-size:13px;color:#374151;margin:18px 0;">${esc(nextStep)}</p>
 <p style="font-size:12px;color:#6B7280;margin:0 0 12px;font-style:italic;">${esc(disclaimer)}</p>
-<p style="font-size:13px;color:#374151;margin:0;">${esc(SITE.phonePrimary)} · ${esc(SITE.phoneSecondary)} · ${esc(SITE.email)}</p>`,
+<p style="font-size:13px;color:#374151;margin:0;">${esc(SITE.phone)} · ${esc(SITE.email)}</p>`,
     intro,
   );
 
@@ -665,7 +665,7 @@ ${nextStep}
 
 ${disclaimer}
 
-${SITE.phonePrimary} · ${SITE.phoneSecondary} · ${SITE.email}
+${SITE.phone} · ${SITE.email}
 
 — VYNTEX`;
 
@@ -818,7 +818,7 @@ ${itemRows}
 <td style="padding:10px 0 0;font-size:14px;font-weight:bold;color:#111827;text-align:right;border-top:1px solid #E5E7EB;">${esc(money(d.totalCents))}</td></tr>
 </table>
 <p style="font-size:12px;color:#6B7280;margin-top:16px;">${esc(laborNote)}</p>
-<p style="font-size:13px;color:#374151;margin:14px 0 0;">${esc(SITE.phonePrimary)} · ${esc(SITE.phoneSecondary)} · ${esc(SITE.email)}</p>`,
+<p style="font-size:13px;color:#374151;margin:14px 0 0;">${esc(SITE.phone)} · ${esc(SITE.email)}</p>`,
     intro,
   );
 
@@ -835,7 +835,7 @@ Total: ${money(d.totalCents)}
 
 ${laborNote}
 
-${SITE.phonePrimary} · ${SITE.phoneSecondary} · ${SITE.email}
+${SITE.phone} · ${SITE.email}
 
 — VYNTEX`;
 
@@ -879,7 +879,7 @@ export function partnerExpiringEmail(d: PartnerExpiringEmailData): EmailContent 
 <p style="font-size:14px;color:#374151;margin:0 0 18px;">${esc(intro)}</p>
 <p style="margin:0 0 18px;"><a href="${esc(d.portalUrl)}" style="display:inline-block;background:#0EA5E9;color:#050714;font-weight:bold;font-size:13px;text-decoration:none;padding:11px 20px;border-radius:8px;">${esc(lang === "es" ? "Renovar acceso" : "Renew access")}</a></p>
 <p style="font-size:12px;color:#6B7280;margin:0 0 18px;">${esc(note)}</p>
-<p style="font-size:13px;color:#374151;margin:0;">${esc(SITE.phonePrimary)} · ${esc(SITE.phoneSecondary)} · ${esc(SITE.email)}</p>`,
+<p style="font-size:13px;color:#374151;margin:0;">${esc(SITE.phone)} · ${esc(SITE.email)}</p>`,
     intro,
   );
 
@@ -891,7 +891,7 @@ ${d.portalUrl}
 
 ${note}
 
-${SITE.phonePrimary} · ${SITE.phoneSecondary} · ${SITE.email}
+${SITE.phone} · ${SITE.email}
 
 — VYNTEX`;
 
@@ -927,7 +927,7 @@ export function partnerExpiredEmail(d: PartnerExpiredEmailData): EmailContent {
 <p style="font-size:14px;color:#374151;margin:0 0 18px;">${esc(intro)}</p>
 <p style="margin:0 0 18px;"><a href="${esc(d.portalUrl)}" style="display:inline-block;background:#0EA5E9;color:#050714;font-weight:bold;font-size:13px;text-decoration:none;padding:11px 20px;border-radius:8px;">${esc(lang === "es" ? "Renovar acceso" : "Renew access")}</a></p>
 <p style="font-size:12px;color:#6B7280;margin:0 0 18px;">${esc(note)}</p>
-<p style="font-size:13px;color:#374151;margin:0;">${esc(SITE.phonePrimary)} · ${esc(SITE.phoneSecondary)} · ${esc(SITE.email)}</p>`,
+<p style="font-size:13px;color:#374151;margin:0;">${esc(SITE.phone)} · ${esc(SITE.email)}</p>`,
     intro,
   );
 
@@ -939,7 +939,7 @@ ${d.portalUrl}
 
 ${note}
 
-${SITE.phonePrimary} · ${SITE.phoneSecondary} · ${SITE.email}
+${SITE.phone} · ${SITE.email}
 
 — VYNTEX`;
 

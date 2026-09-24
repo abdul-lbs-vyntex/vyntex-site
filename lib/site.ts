@@ -15,9 +15,9 @@ export const SITE = {
 
   email: "info@vyntexusa.com",
 
-  // Primary number is used for the default click-to-call.
-  phonePrimary: "609-813-0633",
-  phoneSecondary: "609-322-7593",
+  // VYNTEX has ONE official business line (calls, texts, WhatsApp).
+  // 609-813-0633 belongs to Lion Business Services — never use it for VYNTEX.
+  phone: "609-780-3218",
 
   address: {
     locality: "Northfield",
@@ -40,8 +40,7 @@ export function telHref(phone: string): string {
 
 export const CONTACT_HREFS = {
   email: `mailto:${SITE.email}`,
-  phonePrimary: telHref(SITE.phonePrimary),
-  phoneSecondary: telHref(SITE.phoneSecondary),
+  phone: telHref(SITE.phone),
 } as const;
 
 /** Primary multi-page navigation. */
