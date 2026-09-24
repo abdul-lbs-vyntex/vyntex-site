@@ -530,6 +530,28 @@
     font: inherit;
     font-weight: 800;
   }
+  .catalog-detail {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    border-top: 1px solid rgba(148, 163, 184, 0.14);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    padding: 0.7rem 0;
+    font-size: 0.85rem;
+  }
+  .catalog-detail dt { color: var(--vx-muted); white-space: nowrap; }
+  .catalog-detail dd { color: var(--vx-ink); font-weight: 700; text-align: right; }
+  .catalog-heading {
+    font-family: var(--font-jetbrains-mono);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .catalog-best {
+    border-top: 1px solid rgba(148, 163, 184, 0.14);
+    padding-top: 1rem;
+  }
   .services-catalog-cta:focus-visible,
   .services-category-tab:focus-visible {
     outline: 2px solid var(--vx-cyan);
@@ -537,11 +559,9 @@
   }
 }
 
-/* Catalog tabs hold 1-4 cards: keep short rows centered, 4 cards as a 2x2. */
+/* Catalog: two-column groups (Packages, CRM) as in the Command Center. */
 @media (min-width: 1024px) {
-  .services-price-grid.is-catalog.count-1 { grid-template-columns: minmax(0, 400px); justify-content: center; }
-  .services-price-grid.is-catalog.count-2 { grid-template-columns: repeat(2, minmax(0, 400px)); justify-content: center; }
-  .services-price-grid.is-catalog.count-4 { grid-template-columns: repeat(2, minmax(0, 480px)); justify-content: center; }
+  .services-price-grid.is-catalog.is-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 1023px) {

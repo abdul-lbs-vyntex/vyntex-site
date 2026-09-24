@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import ServicesHub from "@/components/marketing/ServicesHub";
-import { getServiceCatalog } from "@/lib/stripe/catalog";
 
 export const metadata: Metadata = {
   title: "Services | VYNTEX",
@@ -9,10 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/services" },
 };
 
-// Catalog is synced from Stripe; the webhook refreshes it instantly, this is the backstop.
-export const revalidate = 3600;
-
-export default async function Page() {
-  const catalog = await getServiceCatalog();
-  return <ServicesHub catalog={catalog} />;
+export default function Page() {
+  return <ServicesHub />;
 }
